@@ -54,3 +54,5 @@ for (let productEan of carts[0].products) {
     console.log(formatProduct(products.find(element => element.ean === productEan)));
 
 }
+
+console.log(frame("*", "-", 54));
