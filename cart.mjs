@@ -11,4 +11,5 @@ console.log('Discount', core.discountedPrice(100, 0.2));
 for (let cartRow of carts) {
 
     // genera ricevuta
+    console.log("ciao");
 }
