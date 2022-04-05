@@ -30,20 +30,21 @@ const formattedDate = function() {
 
 const header = () => `${myUsername} Cart - ${myPid}\n${formattedDate()}`;
 
-const scontrino = function(cart) {
+const frame = (sideChar, centralChar, lenght) => `${sideChar} ${centralChar.repeat(lenght-4)} ${sideChar}`
 
-
-
-}
 
 
 
 // Main
 
+console.log(frame("+", "-", 54));
+
 console.log(header());
 
-//for (let cart of carts) {
-//
-//
-//
-//}
+console.log(frame("*", "-", 54));
+
+for (let cart of carts) {
+
+
+
+}
