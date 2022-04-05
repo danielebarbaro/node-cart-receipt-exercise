@@ -32,6 +32,12 @@ const header = () => `${myUsername} Cart - ${myPid}\n${formattedDate()}`;
 
 const frame = (sideChar, centralChar, lenght) => `${sideChar} ${centralChar.repeat(lenght-4)} ${sideChar}`
 
+const formatProduct = function(product) {
+
+    return `\t[${product.ean}]\t${product.name}\t\t${product.price}`
+
+}
+
 
 
 
@@ -43,8 +49,8 @@ console.log(header());
 
 console.log(frame("*", "-", 54));
 
-for (let cart of carts) {
+for (let productEan of carts[0].products) {
 
-
+    console.log(formatProduct(products.find(element => element.ean === productEan)));
 
 }
