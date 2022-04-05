@@ -11,21 +11,20 @@ console.log('Discount', core.discountedPrice(100, 0.2));*/
 for (let cartRow of carts) {
 
     // genera ricevuta
+    console.log(`\n\n`);
     const { user: uuid, products} = cartRow;
     const user = core.getUser(uuid);
-    core.printDelimiter(`+`, '-', 50);
+    console.log(core.printDelimiter(`+`, '-', 50));
     console.log(`${core.printShopName()}`);
     console.log(`${core.getDate()}`);
-    core.printDelimiter(`*`, '-', 50);
-    for (let item in cartRow.products){
-        console.log(`   ${item.ean}    ${item.name}\t\t${item.price}`);
-    }
-    core.printDelimiter(`*`, '-', 50);
-    console.log(`   Totale:\t\t\t${core.sumTotale(uuid)}`);
-    core.printDelimiter(`*`, '-', 50);
-    console.log(`\n`);
-    core.printDelimiter(`**`, '-', 50);
-    console.log(`   ${user.firstName} ${user.lastName} ha un credito residuo di ${user.wallet.toFixed(2)}`);
-    core.printDelimiter(`**`, '-', 50);
+    console.log(core.printDelimiter(`*`, '-', 50));
+    core.formatList(cartRow.products);
+    console.log(core.printDelimiter(`*`, '-', 50));
+    console.log(`   Totale:\t\t\t${core.sumTotale(cartRow.products)}`);
+    console.log(core.printDelimiter(`*`, '-', 50));
+    (user.promo !== `` ? core.printPromo(user) : console.log(`\n`));
+    console.log(core.printDelimiter(`**`, '-', 50));
+    console.log(`   ${user.firstName} ${user.lastName} ha un credito residuo di ${(user.wallet.toFixed(2))}`);
+    console.log(core.printDelimiter(`**`, '-', 50));
 
 }
