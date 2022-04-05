@@ -8,7 +8,12 @@ console.log('Cart', carts);
 
 console.log('Discount', core.discountedPrice(100, 0.2));
 
-for (let cartRow of carts) {
+for (let cartRow of carts) { 
+    const {user: cardUserUUID, products}=cartRow;
+    const user = core.getUser(cartUserUUID);
+    const portafoglio = user.wallet;
+    const name = user.firstName;
+    const surname = user.lastName;
 
     // genera ricevuta
 }
