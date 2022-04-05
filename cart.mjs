@@ -12,3 +12,5 @@ for (let cartRow of carts) {
 
     // genera ricevuta
 }
+
+console.log('Marcccc');
