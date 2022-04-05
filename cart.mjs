@@ -20,11 +20,10 @@ for (let cartRow of carts) {
     console.log(core.printDelimiter(`*`, '-', 50));
     core.formatList(cartRow.products);
     console.log(core.printDelimiter(`*`, '-', 50));
-    console.log(`   Totale:\t\t\t${core.sumTotale(cartRow.products, user)}`);
+    console.log(`   Totale:\t\t\t\t${core.sumTotale(cartRow.products, user)}`);
     console.log(core.printDelimiter(`*`, '-', 50));
-    let spesa = (user.promo !== `` || user.promo != undefined ? core.printPromo(cartRow.products ,user) : console.log(`\n`));
+    let spesa = core.printPromo(cartRow.products ,user);
     console.log(core.printDelimiter(`**`, '-', 50));
     console.log(`   ${user.firstName} ${user.lastName} ha un credito residuo di ${((user.wallet) - spesa).toFixed(2)}`);
     console.log(core.printDelimiter(`**`, '-', 50));
-
 }

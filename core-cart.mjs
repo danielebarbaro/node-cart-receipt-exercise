@@ -10,6 +10,7 @@ const printShopName = () =>  `${os.userInfo().username.toUpperCase()} - Cart ${p
 const printDelimiter = (startFinisc, innerSymbol, n) => `${startFinisc} ${innerSymbol.repeat(n)} ${startFinisc}`;
 
 const format = (word) => word.toLowerCase().charAt(0).toUpperCase() + word.toLowerCase().slice(1);
+
 const formatList = (list) => {
     let prodotto;
     let counter = 0;
@@ -29,8 +30,7 @@ const formatList = (list) => {
         }else {
             formattedName = `${format(prodotto.name)}`;
         }
-        prodotto.name = formattedName;
-        console.log(`   [${codice}]\t${prodotto.name}\t\t${prodotto.price}`);
+        console.log(`   [${codice}]\t${formattedName}${((prodotto.name.split(` `).length > 1 ) ? `\t\t` : `\t\t\t`)}${prodotto.price.toFixed(2)}`); ;
     }
 }
 
@@ -59,8 +59,10 @@ const printPromo = (lista, currentUser) => {
     if (currentUser.promo !== `` && currentUser.promo != undefined) {
         let rate = promoCode.find(code => code.name === currentUser.promo);
         totale = totale - (totale * rate.percentage);
-        console.log(`   ${rate.name}\t\t\t${rate.percentage*100}%`);
-        console.log(`   Totale scontato:\t\t${totale.toFixed(2)}`);
+        console.log(`   ${rate.name}\t\t\t\t${(rate.percentage*100).toFixed(2)}%`);
+        console.log(`   Totale scontato:\t\t\t${totale.toFixed(2)}`);
+    }else {
+        console.log(`\n`);
     }
    return totale;
 }
@@ -68,7 +70,7 @@ const printPromo = (lista, currentUser) => {
 const getDate = () => {
     let options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
     let date = new Date();
-    return date.toLocaleString(`it-IT`, options);
+    return date.toLocaleString(`en-US`, options);
 }
 
 const getUser = (uuid) => users.find(user => user.uuid === uuid);
