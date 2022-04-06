@@ -14,29 +14,23 @@ const myPid = String(process.pid);
 
 // Funzioni
 
-const formattedDate = function() {
+const formatDate = function(date) {
     let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-    let d = new Date();
-
-    let dayName = days[d.getDay()];
-    let monthName = months[d.getMonth()];
-    let dayNumberPadded = ("00" + d.getDay().toString()).slice(-2);
-    let year = d.getFullYear();
+    let dayName = days[date.getDay()];
+    let monthName = months[date.getMonth()];
+    let dayNumberPadded = ("00" + date.getDate().toString()).slice(-2);
+    let year = date.getFullYear();
 
     return `${dayName} ${monthName} ${dayNumberPadded} ${year}`
 }
 
-const header = () => `${myUsername} Cart - ${myPid}\n${formattedDate()}`;
+const header = () => `${myUsername} Cart - ${myPid}\n${new Date().toDateString()}`;
 
-const frame = (sideChar, centralChar, lenght) => `${sideChar} ${centralChar.repeat(lenght-4)} ${sideChar}`
+const frame = (sideChar, centralChar, lenght) => `${sideChar} ${centralChar.repeat(lenght-4)} ${sideChar}`;
 
-const formatProduct = function(product) {
-
-    return `\t[${product.ean}]\t${product.name}\t\t${product.price}`
-
-}
+const formatProduct = (product) => `[${product.ean}]\t${product.name}\t\t\t${product.price}`;
 
 
 
@@ -49,10 +43,20 @@ console.log(header());
 
 console.log(frame("*", "-", 54));
 
+let total = 0;
+
 for (let productEan of carts[0].products) {
-
-    console.log(formatProduct(products.find(element => element.ean === productEan)));
-
+    
+    let product = products.find(element => element.ean === productEan);
+    
+    console.log("   " + formatProduct(product));
+    
+    total += product.price;
+    
 }
 
 console.log(frame("*", "-", 54));
+
+console.log(`   Total:\t\t\t\t${total.toFixed(2)}`);
+
+console.log(frame("+", "-", 54));
