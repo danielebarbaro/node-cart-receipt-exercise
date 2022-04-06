@@ -30,7 +30,7 @@ const formatList = (list) => {
         }else {
             formattedName = `${format(prodotto.name)}`;
         }
-        listaFormattata += `\n   [${codice}]\t${formattedName}${((prodotto.name.split(` `).length > 1 ) ? `\t`.repeat(3) : `\t`.repeat(5))}${prodotto.price.toFixed(2)}`;
+        listaFormattata += `\n   [${codice}]\t${formattedName}${((prodotto.name.split(` `).length > 1 ) ? `\t`.repeat(2) : `\t`.repeat(3))}${prodotto.price.toFixed(2)}`;
     }
     return listaFormattata;
 }
@@ -53,9 +53,7 @@ const printPromo = (lista, currentUser) => {
     if (currentUser.promo !== `` && currentUser.promo != undefined) {
         let sconto = promoCode.find(code => code.name === currentUser.promo);
         totale = discountedPrice(totale, sconto.percentage);
-        result = `   ${sconto.name}:${`\t`.repeat(7)}${(sconto.percentage*100).toFixed(2)}%\n   Totale scontato:${`\t`.repeat(5)}${totale}`;
-    }else {
-        console.log(`\n`);
+        result = `   ${sconto.name}:${`\t`.repeat(4)}${(sconto.percentage*100).toFixed(2)}%\n   Totale scontato:${`\t`.repeat(3)}${totale}`;
     }
     return result;
 }
