@@ -13,6 +13,7 @@ const format = (word) => word.toLowerCase().charAt(0).toUpperCase() + word.toLow
 
 const formatList = (list) => {
     let counter = 0;
+    let listaFormattata = ``;
     for ( let codice of list ) {
         let prodotto = products.find(product => product.ean === codice);
         let formattedName = ``;
@@ -29,8 +30,9 @@ const formatList = (list) => {
         }else {
             formattedName = `${format(prodotto.name)}`;
         }
-        return `   [${codice}]\t${formattedName}${((prodotto.name.split(` `).length > 1 ) ? `\t\t` : `\t\t\t`)}${prodotto.price.toFixed(2)}`;
+        listaFormattata += `\n   [${codice}]\t${formattedName}${((prodotto.name.split(` `).length > 1 ) ? `\t`.repeat(3) : `\t`.repeat(5))}${prodotto.price.toFixed(2)}`;
     }
+    return listaFormattata;
 }
 
 const sumTotale = (lista) => {
@@ -51,7 +53,7 @@ const printPromo = (lista, currentUser) => {
     if (currentUser.promo !== `` && currentUser.promo != undefined) {
         let sconto = promoCode.find(code => code.name === currentUser.promo);
         totale = discountedPrice(totale, sconto.percentage);
-        result = `   ${sconto.name}:\t\t\t\t${(sconto.percentage*100).toFixed(2)}%\n   Totale scontato:\t\t\t${totale}`;
+        result = `   ${sconto.name}:${`\t`.repeat(7)}${(sconto.percentage*100).toFixed(2)}%\n   Totale scontato:${`\t`.repeat(5)}${totale}`;
     }else {
         console.log(`\n`);
     }
