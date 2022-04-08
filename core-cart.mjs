@@ -1,4 +1,4 @@
-import {carts, products, promoCode, users} from "./dataset.mjs";
+import {carts, products, promoCodes, users} from "./dataset.mjs"; // Cambiato promoCode al plurale
 
 import * as fs from "fs";
 import * as os from "os";
