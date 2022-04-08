@@ -17,7 +17,7 @@ Ad esempio il `cart` dello `user` `d0393a66-4e43-493e-b587-49d7ae95af0c` genera 
     + -------------------------------------------------- +
     
     ** -------------------------------------------------- **
-       Winston Wolf ha un credito residuo di 15.25
+       Winston Wolf ha un credito residuo di 10.04
     ** -------------------------------------------------- **
 
 ```
