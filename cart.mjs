@@ -1,4 +1,4 @@
-import {carts, products, promoCodes, users} from "./dataset.mjs"; // Cambiato promoCode al plurale
+import {carts, products, promoCode as promoCodes, users} from "./dataset.mjs"; // Importo "promoCode" come "promoCodes" per consistenza con tutti gli altri array (carts, products, users)
 import * as core from "./core-cart.mjs";
 
 import * as fs from "fs";

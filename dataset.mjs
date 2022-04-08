@@ -104,7 +104,7 @@ const users = [
     },
 ];
 
-const promoCodes = [ // Tutte gli altri array di oggetti hanno il nome al plurale. Ho messo al plurale anche questo.
+const promoCode = [
     {
         name: 'PROMO-10',
         percentage: 0.10
@@ -169,6 +169,6 @@ const carts = [
 export {
     products,
     users,
-    promoCodes, // Cambiato al plurale
+    promoCode,
     carts
 };
