@@ -34,27 +34,29 @@ const getDiscountedPrice = (price, discount) => safeSubtraction(price, price * d
 
 const checkout = function(cart) {
     
-    if (cart.products.length === 0) throw {name : "CartEmptyError", message : "This cart is empty!"};
+    if (cart.products.length === 0)
+        throw {name : "CartEmptyError", message : "This cart is empty!"};
     
     let cartUser = getUserByUuid(cart.user);
     let cartProducts = cart.products.map(ean => getProductByEan(ean));
     
-    let cartDiscount = (cartUser.promo === undefined || cartUser.promo.length === 0) ? 0 : getPromoByName(cartUser.promo).percentage;
-
+    let cartDiscount = (cartUser.promo === undefined || cartUser.promo.length === 0) ? 0 : getPromoByName(cartUser.promo).percentage; // Se promo è undefined o stringa vuota imposto lo sconto a zero, altrimenti imposto lo sconto secondo la promozione.
+    
     let totalUndiscounted = cartProducts.reduce( (subtotal, product) => safeSum(subtotal, product.price), 0); // Lo zero alla fine è il valore iniziale di subtotal.
     let totalDiscounted = cartProducts.reduce( (subtotal, product) => safeSum(subtotal, getDiscountedPrice(product.price, cartDiscount)), 0); // Lo zero alla fine è il valore iniziale per subtotal.
     
-    if (safeSubtraction(cartUser.wallet, totalDiscounted) < 0) throw {name : "BalanceTooLowError", message : "This user's balance is too low to purchase the products in their cart!"};
+    if (safeSubtraction(cartUser.wallet, totalDiscounted) < 0)
+        throw {name : "BalanceTooLowError", message : "This user's balance is too low to purchase the products in their cart!"};
+    
+    cartUser.wallet = safeSubtraction(cartUser.wallet, totalDiscounted);
     
     
     
-    console.log(cartUser.firstName, cartDiscount, totalUndiscounted, totalDiscounted);
+    console.log(cartUser.firstName, cartDiscount, totalUndiscounted, totalDiscounted, cartUser.wallet);
     
     
     
-    // Calcolare il totale, lo sconto, il totale scontato e verificare se l'utente può permettersi i prodotti...
-    // ...Se non può:
-    //throw {name : "BalanceTooLow", message : "The user balance is too low to purchase the products in the cart!"};
+    // Preparare ricevuta e abbiamo quasi finito.
     
     //let receipt = {
     //    user: getUserByUuid(cart.user),
