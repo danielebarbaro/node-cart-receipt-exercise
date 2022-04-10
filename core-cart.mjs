@@ -4,13 +4,33 @@ import * as fs from "fs";
 import * as os from "os";
 import { privateDecrypt } from "crypto";
 
-const discountedPrice = (price, rate = 0.10) => (price * (1 - rate)).toFixed(2);
 
+const separatore = `+ -------------------------------------------------- +`;
+export {
+    separatore
+}
+
+const listaProdotti = (prodotti) => {
+    let stringa = ``;;
+    for(let item of prodotti){
+        if(item !== prodotti)
+    }
+}
+
+
+const getTotale = (productsUser) => 
+
+const getSconto = ()
+
+
+
+
+
+const discountedPrice = (price, rate = 0.10) => (price * (1 - rate)).toFixed(2);
 export {
     discountedPrice,
 };
 
-const helloWorld = (name => `Hello ${name}`);
 
 const printShopName = () =>{
     const {username} =os.userInfo();
@@ -19,10 +39,10 @@ const printShopName = () =>{
 
 const getUser = (uuid) => users.find(users => users.uuid);
 
+//let creditoResiduo(user)
+const stringFormat = (string) => product.toLowerCase().charAt(0).toUpperCase() + product.toLowerCase().slice(1)
 
 const formatProductName = (product) => {
-    return product.toLowerCase().charAt(0).toUpperCase() + product.toLowerCase().slice(1)
-}
 
 for (let item of products) {
     let formattedName = '';
@@ -39,19 +59,23 @@ for (let item of products) {
     }
 
     item.name = formattedName;
-
-    cart.push(item);
+    
 }
 
 
 const filterType = (products) => products;
 
 
-const sumCartItem = (products) => {
+const sumCartItem = (carts.products); => 
+{
     let total = 0;
-    for(let item of products)
-        total += products.price
+    for(let item of carts.products)
+        total += carts.products.price
 };
+
+const stampaTotale = (users) => {
+    console.log(`Totale:                ${sumCartItem()}`)
+}
 
 
 const formatProductList = (products) => products;
