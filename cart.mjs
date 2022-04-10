@@ -18,11 +18,15 @@ const safeSum = (a, b) => ((a * 100) + (b * 100)) / 100; // Perchè a javascript
 
 const safeSubtraction = (a, b) => ((a * 100) - (b * 100)) / 100;
 
+const capitalize = (str) => `${str[0].toUpperCase()}${str.substring(1).toLowerCase()}`;
+
 const header = () => `${myUsername} Cart - ${myPid}\n${new Date().toDateString()}`;
 
-const frame = (sideChar, centralChar, length) => `${sideChar} ${centralChar.repeat(length-4)} ${sideChar}`;
+const frame = (sideStr, centralChar, width) => `${sideStr} ${centralChar.repeat( width - ((sideStr.length * 2) + 2) )} ${sideStr}`;
 
-const formatProduct = (product) => `[${product.ean}]\t${product.name}\t\t\t${product.price}`;
+const alignLeftRight = (strLeft, strRight, width) => strLeft + (" ".repeat(width-strLeft.length) + strRight).slice(-(width-strLeft.length));
+
+const formatProduct = (product) => alignLeftRight(`[${product.ean}]    ${capitalize(product.name)}`,`${product.price.toFixed(2)}    `,50);
 
 const getProductByEan = (ean) => products.find(product => product.ean === ean);
 
@@ -52,18 +56,47 @@ const checkout = function(cart) {
     
     
     
-    console.log(cartUser.firstName, cartDiscount, totalUndiscounted, totalDiscounted, cartUser.wallet);
-    
-    
-    
     // Preparare ricevuta e abbiamo quasi finito.
     
     //let receipt = {
-    //    user: getUserByUuid(cart.user),
-    //    products: cart.products.map(ean => getProductByEan(ean))
+    //    user: cartUser,
+    //    products: cartProducts
     //}
+        
+    let receipt = [];
+
+    receipt.push(frame("+", "-", 54));
+    receipt.push(header());
     
-    //return receipt;
+    receipt.push(frame("*", "-", 54));
+    
+    cartProducts.forEach(product => receipt.push(alignLeftRight(`   [${product.ean}]    ${capitalize(product.name)}`, `${product.price.toFixed(2)}    `, 54)));
+    
+    receipt.push(frame("*", "-", 54));
+    
+    receipt.push(alignLeftRight("   Totale:", `${totalUndiscounted.toFixed(2)}    `, 54));
+    
+    receipt.push(frame("+", "-", 54));
+    
+    if (cartDiscount > 0) {
+        
+        receipt.push(alignLeftRight("   Sconto:", `${safeSubtraction(totalUndiscounted,totalDiscounted).toFixed(2)}    `, 54));
+        receipt.push(alignLeftRight("   Totale scontato:", `${totalDiscounted.toFixed(2)}    `, 54));
+        receipt.push("");
+        receipt.push(alignLeftRight("   CODICE PROMO:", `${cartUser.promo.toUpperCase()}    `, 54));
+        receipt.push(frame("+", "-", 54));
+        
+    }
+    
+    receipt.push("");
+    
+    receipt.push(frame("**", "-", 54));
+    
+    receipt.push(`   ${capitalize(cartUser.firstName)} ${capitalize(cartUser.lastName)} ha un credito residuo di ${cartUser.wallet.toFixed(2)}`);
+    
+    receipt.push(frame("**", "-", 54));
+    
+    return receipt.join("\n");
     
 }
 
@@ -71,35 +104,9 @@ const checkout = function(cart) {
 
 // Main
 
-console.log(frame("+", "-", 54));
-
-console.log(header());
-
-console.log(frame("*", "-", 54));
-
-let total = 0;
-
-for (let productEan of carts[4].products) {
-    
-    let product = getProductByEan(productEan);
-    
-    console.log("   " + formatProduct(product));
-    
-    total += product.price;
-    
-}
-
-console.log(frame("*", "-", 54));
-
-console.log(`   Total:\t\t\t\t${total.toFixed(2)}`);
-
-console.log(frame("+", "-", 54));
-
-
-
 try {
     
-    checkout(carts[0]);
+    console.log(checkout(carts[1]));
     
 } catch (exception) {
     
