@@ -11,16 +11,14 @@ export {
 }
 
 const listaProdotti = (prodotti) => {
-    let stringa = ``;;
+    let stringa = ``;
     for(let item of prodotti){
         if(item !== prodotti)
     }
 }
 
 
-const getTotale = (productsUser) => 
-
-const getSconto = ()
+//const getTotale = (productsUser) => 
 
 
 
@@ -33,8 +31,7 @@ export {
 
 
 const printShopName = () =>{
-    const {username} =os.userInfo();
-    return `${username.toUpperCase()} - Cart ${process.pid}`;
+
 }
 
 const getUser = (uuid) => users.find(users => users.uuid);
@@ -66,12 +63,13 @@ for (let item of products) {
 const filterType = (products) => products;
 
 
-const sumCartItem = (carts.products); => 
+const sumCartItem = (carts.products) => 
 {
     let total = 0;
     for(let item of carts.products)
         total += carts.products.price
 };
+
 
 const stampaTotale = (users) => {
     console.log(`Totale:                ${sumCartItem()}`)
