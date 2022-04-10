@@ -14,7 +14,7 @@ const myPid = String(process.pid);
 
 // Funzioni
 
-const safeSum = (a, b) => ((a * 100) + (b * 100)) / 100; // Perchè a javascript viene l'ansia a fare i conti in virgola mobile.
+const safeSum = (a, b) => ((a * 100) + (b * 100)) / 100; // Apparentemente javascript e i decimali non vanno d'accordo.
 
 const safeSubtraction = (a, b) => ((a * 100) - (b * 100)) / 100;
 
@@ -38,10 +38,15 @@ const getDiscountedPrice = (price, discount) => safeSubtraction(price, price * d
 
 const checkout = function(cart) {
     
+    // Elaboro carrello
+
+    let cartUser = getUserByUuid(cart.user);
+    
+    console.log(`Processing ${capitalize(cartUser.firstName)} ${capitalize(cartUser.lastName)}'s cart... `); // Facciamo sapere all'utente che stiamo facendo.
+    
     if (cart.products.length === 0)
         throw {name : "CartEmptyError", message : "This cart is empty!"};
     
-    let cartUser = getUserByUuid(cart.user);
     let cartProducts = cart.products.map(ean => getProductByEan(ean));
     
     let cartDiscount = (cartUser.promo === undefined || cartUser.promo.length === 0) ? 0 : getPromoByName(cartUser.promo).percentage; // Se promo è undefined o stringa vuota imposto lo sconto a zero, altrimenti imposto lo sconto secondo la promozione.
@@ -54,19 +59,18 @@ const checkout = function(cart) {
     
     cartUser.wallet = safeSubtraction(cartUser.wallet, totalDiscounted);
     
+    console.log("Done!"); // La parte dove qualcosa poteva andare storta dovrebbe essere passata.
     
     
-    // Preparare ricevuta e abbiamo quasi finito.
     
-    //let receipt = {
-    //    user: cartUser,
-    //    products: cartProducts
-    //}
+    // Prepararo ricevuta
         
-    let receipt = [];
+    let receipt = []; // Per comodità gestiamo la ricevuta come un array di stringhe e solo all'ultimo le uniamo insieme (così evitiamo problemi con concat ed è anche tutto più leggibile).
 
     receipt.push(frame("+", "-", 54));
-    receipt.push(header());
+    
+    receipt.push(`${myUsername} Cart - ${myPid}`);
+    receipt.push(`${new Date().toDateString()}`);
     
     receipt.push(frame("*", "-", 54));
     
@@ -96,22 +100,97 @@ const checkout = function(cart) {
     
     receipt.push(frame("**", "-", 54));
     
+    
+    
+    // Restituisco ricevuta
+    
     return receipt.join("\n");
     
 }
 
 
 
-// Main
+// MAIN CODE BLOCK
 
-try {
+// Controllo che la cartella per le ricevute esista e se non esiste la creo. Se ci sono problemi, piuttosto che fare qualche casino (ad esempio cancellare qualche file o una cartella), esco con errore.
+
+const receiptsFolder = "receipts";
+
+try {    
     
-    console.log(checkout(carts[1]));
+    if (!fs.existsSync(receiptsFolder)) {
+        
+        fs.mkdirSync(receiptsFolder);
+        
+    } else {
+        
+        fs.readdirSync(receiptsFolder); // fs.existsSync non distingue tra cartelle e file. Se receiptsFolder dovesse essere un file tentare di leggere il suo contenuto come cartella causerà un eccezione (che è quello che vogliamo in questo caso).
+        
+    }
     
 } catch (exception) {
     
-    console.log(`${exception.name}: ${exception.message}`);
+    console.error(exception.message);
     
-    // Fare qualcosa se il carrello è vuoto.
+    process.exit(1); // Se siamo finiti qui significa che la cartella dove scrivere i file non esiste/non è stata creata e non c'è nulla che possiamo farci, tanto vale uscire.
     
 }
+
+
+
+// Processiamo i carrelli e creiamo le ricevute.
+
+let receipts = []; // Raccogliamo qui tutte le ricevute (sono oggetti di due stringhe: la ricevuta vera e propria e l'uuid).
+
+for (const cart of carts) {
+    
+    console.log("\n\n");
+    
+    try {
+        
+        receipts.push({
+            content : checkout(cart),
+            uuid : cart.user
+        });
+        
+    } catch (exception) {
+        
+        console.log(`${exception.name}: ${exception.message}`); // Queste eccezioni in realtà sono più dei "warning", non dovrebbe succedere nulla di catastrofico (per questo console.log invece di console.error).
+        
+    }
+
+}
+
+
+
+// Spostiamoci nella cartella creata prima e stampiamo le ricevute su file.
+
+try {
+    
+    // Spostiamoci nella cartella delle ricevute.
+    
+    process.chdir(receiptsFolder);
+    
+    
+    
+    // Scriviamo su file le ricevute.
+    
+    for (let receipt of receipts) {
+        
+        fs.writeFileSync(`${receipt.uuid}_receipt_${Date.now()}.txt`, receipt.content);
+        
+    }
+    
+} catch (exception) {
+    
+    console.error(exception.message);
+    
+    process.exit(1);
+    
+}
+
+
+
+// Se tutto è andato bene usciamo con successo.
+
+process.exit(0);
