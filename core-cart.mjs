@@ -53,7 +53,7 @@ const printPromo = (lista, currentUser) => {
     if (currentUser.promo !== `` && currentUser.promo != undefined) {
         let sconto = promoCode.find(code => code.name === currentUser.promo);
         totale = discountedPrice(totale, sconto.percentage);
-        result = `   ${sconto.name}:${`\t`.repeat(4)}${(sconto.percentage*100).toFixed(2)}%\n   Totale scontato:${`\t`.repeat(3)}${totale}`;
+        result = `   Sconto:${`\t`.repeat(4)}${(totale*sconto.percentage).toFixed(2)}\n   Totale scontato:${`\t`.repeat(3)}${totale}\n\n   CODICE SCONTO:${`\t`.repeat(3)}${sconto.name}`;
     }
     return result;
 }
@@ -71,13 +71,19 @@ const totaleScontato = (currentUser, totaleNonScontato) => {
 const getDate = () => {
     let options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
     let date = new Date();
-    return date.toLocaleString(`en-US`, options);
+    return date.toLocaleString(`it-IT`, options);
+}
+
+const genDate = () => {
+    let today  = new Date();
+;
+    return today.getDay() + `-` +  today.getMonth() + `-` + today.getFullYear();
 }
 
 const getUser = (uuid) => users.find(user => user.uuid === uuid);
 
-const printReceipt = (receiptText, counterCart) => {
-    fs.writeFile(`./receipts/receipt${counterCart}.txt`, receiptText, err => {
+const printReceipt = (receiptText, uuid) => {
+    fs.writeFile(`./receipts/${uuid}_receipt_${genDate()}.txt`, receiptText, err => {
         if (err) {
           console.error(err)
           return
