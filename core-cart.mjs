@@ -14,7 +14,7 @@ const format = (word) => word.toLowerCase().charAt(0).toUpperCase() + word.toLow
 const formatList = (list) => {
     let counter = 0;
     let listaFormattata = ``;
-    for ( let codice of list ) {
+    list.forEach( codice =>  {
         let prodotto = products.find(product => product.ean === codice);
         let formattedName = ``;
         let multiName = prodotto.name.split(' ');
@@ -31,19 +31,19 @@ const formatList = (list) => {
             formattedName = `${format(prodotto.name)}`;
         }
         listaFormattata += `\n   [${codice}]\t${formattedName}${((prodotto.name.split(` `).length > 1 ) ? `\t`.repeat(2) : `\t`.repeat(3))}${prodotto.price.toFixed(2)}`;
-    }
+    });
     return listaFormattata;
 }
 
 const sumTotale = (lista) => {
     let totale = 0;
     if (lista != null){
-        for (let codice of lista) {
+        lista.forEach(codice => {
             let prodotto = products.find(product => product.ean === codice);
             totale += prodotto.price;
-        }
+        });
     }
-    
+
     return totale.toFixed(2);
 }
 

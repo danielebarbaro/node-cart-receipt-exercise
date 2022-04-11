@@ -27,7 +27,6 @@ for (let cartRow of carts) {
     receiptText +=  core.printDelimiter(`**`, '-', 50) + `\n`;
     receiptText += `   ${user.firstName} ${user.lastName} ha un credito residuo di ${((user.wallet) - core.totaleScontato(user, core.sumTotale(cartRow.products , user))).toFixed(2)}` + `\n`;
     receiptText +=  core.printDelimiter(`**`, '-', 50) + `\n`;
-
     //console.log(receiptText);
     core.printReceipt(receiptText, counterCart);
     counterCart++;
