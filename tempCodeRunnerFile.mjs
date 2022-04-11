@@ -1,0 +1,2 @@
+
+    scontrino = scontrino + `${core.ge
