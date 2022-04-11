@@ -128,7 +128,8 @@ for (const cart of carts) {
         
         receipts.push({
             content : checkout(cart),
-            uuid : cart.user
+            uuid : cart.user,
+            time : new Date()
         });
         
     } catch (exception) {
@@ -155,8 +156,12 @@ try {
     
     for (let receipt of receipts) {
         
-        fs.writeFileSync(`${receipt.uuid}_receipt_${Date.now()}.txt`, receipt.content);
+        let datetime = `${receipt.time.toISOString().slice(0,10)}_${receipt.time.toISOString().slice(11,-5).split(":").join("-")}`;
         
+        fs.writeFileSync(`${receipt.uuid}_receipt_${datetime}.txt`, receipt.content);
+        
+        //fs.writeFileSync(`${receipt.uuid}_receipt_${receipt.time.getTime()}.txt`, receipt.content);
+                
     }
     
 } catch (exception) {
