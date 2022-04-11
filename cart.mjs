@@ -88,7 +88,7 @@ const checkout = function(cart) {
 
 
 
-// MAIN CODE BLOCK
+// MAIN
 
 // Controllo che la cartella per le ricevute esista e se non esiste la creo. Se ci sono problemi, piuttosto che fare qualche casino (ad esempio cancellare qualche file o una cartella), esco con errore.
 
