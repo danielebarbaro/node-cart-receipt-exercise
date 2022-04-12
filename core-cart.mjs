@@ -50,7 +50,7 @@ const formatProductList = (lista) => {
     return listaProdotti;
 }
 
-// Formatta il nome all'interno dello scontrino (non ancora implementato)
+// Formatta il nome all'interno dello scontrino
 const formatProductName = (product) => {
     return product.toLowerCase().charAt(0).toUpperCase() + product.toLowerCase().slice(1)
 }
@@ -62,11 +62,11 @@ const sumCartItem = (lista) => {
         let prodotto = products.find(product => product.ean === codice);
         somma += prodotto.price;
     });
-    return `\t` + `Totale:` + `  \t\t  ` + somma.toFixed(2);
+    return somma.toFixed(2);
 }
 
 // Stampa lo scontrino in un file "scontrinoN.txt"
-const printReceipt = (testo, contatore) => {
+const printReceipt = (testo, contatore, disponibilita) => {
     fs.writeFile(`./receipt/scontrino${contatore}.txt`, testo, err => {
         if (err) console.error(err);
         return

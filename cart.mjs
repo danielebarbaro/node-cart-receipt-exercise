@@ -20,13 +20,13 @@ for (let cartRow of carts) {
     scontrino += core.createDelimiter(`*`, `-`, 50)
     scontrino += core.formatProductList(cartRow.products) + `\n`
     scontrino += core.createDelimiter(`*`, `-`, 50) + `\n`;
-    scontrino += core.sumCartItem(cartRow.products) + `\n`;
+    scontrino += `\t` + `Totale:` + `  \t\t  ` + core.sumCartItem(cartRow.products) + `\n`;
     scontrino += core.createDelimiter(`+`, `-`, 50) + `\n` + `\n`;
     scontrino += core.createDelimiter(`**`, `-`, 50) + `\n`;
-    scontrino += `\t` + `${user.firstName} ${user.lastName} ha un credito residuo di ${((user.wallet) - core.discountedPrice(core.getProduct(cartRow.products).price)).toFixed(2)}` + `\n`;
+    scontrino += `\t` + `${user.firstName} ${user.lastName} ha un credito residuo di ${((user.wallet) - core.sumCartItem(cartRow.products))}` + `\n`;
     scontrino += core.createDelimiter(`**`, `-`, 50) + `\n`;
 
-    core.printReceipt(scontrino, contatore);
+    core.printReceipt(scontrino, contatore, user.wallet);
     contatore++;
     
 }
