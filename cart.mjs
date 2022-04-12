@@ -1,5 +1,5 @@
 import {carts, products, promoCode, users} from "./dataset.mjs";
-import * as core from "./core-cart.mjs";
+import * as core from "./core-cart.mjs"; //estensione può essere mjs o js per aver facilità nell'importare i dati e le funzionalità
 
 // console.log('Promo', promoCode);
 // console.log('Products', products);
@@ -8,46 +8,73 @@ import * as core from "./core-cart.mjs";
 
 //console.log('SHOP NAME: ', core.printShopName());
 
-for (let cartRow of carts) {
-    console.log(' INIZIO DEL NODO')
 
-    //const {user:cartUserUUID, products} = cartRow;
-    let cartUserUUID = cartRow.user;
-    let products = cartRow.products;
+for (let cartRow of carts) { //quale utente appartiene questo carrelo e quali prodotti ha comprato l'utente
+    
 
-    const user = core.getUser(cartUserUUID);
+    //console.log('RIGA DEL CARRELLO DA STAMPARE', cartRow, '\n')
+    let prodottiUtente = cartRow.products;
+    let UUIDCorrente = cartRow.user;
+    let totaleOrdine = 0;
+   
 
-    //const {uuid, firstName, lastName, wallet, isTeacher, promo} = user;
-    const wallet = user.wallet;
-    const name = user.firstName;
-    const surname = user.lastName;
+    let ean = '';
+    let nomeProdotto = '';
+    let prezzoProdotto ='';
+    let rigaRicevuta = '';
 
-    console.log(`${name} ${surname} ha un wallet di ${wallet} euro`);
-    console.log(`${name} ${surname} vorrebbe comprare `, products);
+    console.log('Utente corrente', UUIDCorrente, '\n')
+    console.log('Prodotti utente corrente',prodottiUtente, '\n')
 
-    //products.forEach(product => {
-    for (let currentProduct of products) {
-        console.log('Voglio estrarre', currentProduct);
-        let prodotto = core.getProduct(currentProduct);
-        console.log(`[${prodotto.ean}] ${prodotto.name} ${prodotto.price}`)
-        //console.log('Prodotto estratto con nome:', prodotto.price);
+    let user = core.getUser(UUIDCorrente);
+    //  console.log('Utente completo',user, '\n');
+    
+    let nomeUtente = user.firstName + ' ' + user.lastName;
+    let disponibilitaUtente = user.wallet;
+    let promoUtente = user.promo;
+
+    let rate = core.getPercentageFromPromoCode(promoUtente);
+   
+    console.log(`${nomeUtente} ha ${rate} di sconto`)
+    
+
+
+    if(prodottiUtente.lenght < 1){
+        console.log(`${nomeUtente} NON HA PRODOTTI NEL CARRELLO.`)
     }
-    console.log(' FINE DEL NODO')
-    //})
-
-    // console.log('RIGA DEL CARRELLO DA STAMPARE', cartRow)
-    // console.log('UUID', uuid)
-    // console.log('Prodotti', products)
-    // console.log('User completo', user);
-
-    //trovare uno user dato il carrello
 
 
-    // capire se l'utente può comprare
+    if(disponibilitaUtente > 0){
+        //console.log(`${nomeUtente}, ha il portafoglio pieno `)
+        console.log('Utente si chiama',nomeUtente, '\n');
+        console.log('Utente ha disponibilità',disponibilitaUtente, 'Euro \n');
 
-    // capire se l'utente ha delle promo
+    }else{
+        console.log(`${nomeUtente} ha il portafoglio VUOTO `)
+    }
 
-    //...
+    for(let item of prodottiUtente){
+        let prodCorrente = core.getProduct(item);
+        let ean = prodCorrente.ean;
+        let nomeProdotto = prodCorrente.name;
+        let prezzoProdotto = prodCorrente.price;
+        let rigaRicevuta = ` \t [${ean}] \t ${nomeProdotto} \t ${prezzoProdotto}`
 
-    // genera ricevuta
+        console.log(rigaRicevuta,'\n')
+        totaleOrdine += prezzoProdotto;
+    }
+
+    if(promoUtente === '' 
+       && promoUtente !== undefined
+       && promoUtente === null) {
+        console.log(`\t CODICE PROMO: \t\t ${promoUtente}  `);
+        let discountedPrice = core.discountedPrice(totaleOrdine, rate);
+        console.log('discountPriceValue ',discountedPriceValue);
+    }
+
+    if(disponibilitaUtente < totaleOrdine){
+        console.log(` ${nomeUtente} NON HA ABBASTANZA SOLDI PER COMPRARE.`)
+    }
+   
 }
+
