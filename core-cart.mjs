@@ -32,14 +32,16 @@ const formatProductList = (lista) => {
         listaProdotti += `\n` + `\t` + `[`
         + prodotto.ean + `]`
         + `\t` 
-        + prodotto.name + `\t`
+        + `${format(prodotto.name)}` + `\t`
         + prodotto.price + `\t\t\t`;
     });
     return listaProdotti;
 }
 
 // Formatta il nome all'interno dello scontrino (non ancora implementato)
-// const formatProductName = (product) => product;
+const formatProductName = (product) => {
+    return product.toLowerCase().charAt(0).toUpperCase() + product.toLowerCase().slice(1)
+}
 
 // Fa la somma dei prezzi
 const sumCartItem = (lista) => {
@@ -72,5 +74,6 @@ export {
     printReceipt,
     createDelimiter,
     getProduct,
-    getData
+    getData,
+    formatProductName
 };
