@@ -5,6 +5,7 @@ import * as os from "os";
 
 
 const discountedPrice = (price, rate = 0.10 ) => (price * (1 - rate)).toFixed(2);
+const discountedPrice2 = (price, rate = 0.10 ) => (price * rate).toFixed(2);
 //(price, rate ) => (price * (1 - rate))
 
 const getUser = (uuid) => users.find(user => user.uuid === uuid);
@@ -32,9 +33,16 @@ const createDelimiter2 = (openClose, symbol, times) => '* ----------------------
 const createDelimiter3 = (openClose, symbol, times) => '** -------------------------------------------------- **';
 
 const calculateWallet = (wallet, totale) => wallet - totale;
-const assicuredWallet = (tot) => tot >= 0 ? tot.toFixed(2) + "€":'Empty' ;
+const assicuredWallet = (tot) => tot >= 0 ? "'s remaining credit: " + tot.toFixed(2) + "€":' has not enough money for this order' ;
 
-const getUserDiscount = (promo) => users.find(user => promo === promoCode.name) ;
+const getUserDiscount = function (promo) {
+   if(promo == '' || promo == undefined)
+   return 0
+   else{
+    users.find(promo => promo === promoCode.name) 
+   return promoCode.percentage
+   }
+   };
 
 
 
@@ -52,6 +60,7 @@ export {
     calculateWallet,
     getUserDiscount,
     assicuredWallet,
+    discountedPrice2,
 };
 
 /*

@@ -7,6 +7,7 @@ for(let user of users){
 
 console.log(core.createDelimiter())
 console.log("  Processing " + core.formatProductName(user.firstName) + " " + core.formatProductName(user.lastName) + " cart:");
+console.log("  " + "TUE APR 12 2022");
 console.log(core.createDelimiter2())
 
 for (let cartRow of carts) {
@@ -28,47 +29,64 @@ for (let cartRow of carts) {
    if (user.uuid == cartRow.user)
    {
       cartRow.products.forEach(product =>
-      somma += core.getProduct(product).price)
-      if(user.promo === undefined || user.promo.length === 0 )
-         somma += 0;
-      else{
-      for(let promo of promoCode)
-         totscont = core.discountedPrice(somma,core.getUserDiscount(user))
-      }
+         somma += core.getProduct(product).price)
+      
    }
 }
+totscont = somma - core.discountedPrice2(somma,core.getUserDiscount(user.promo));
 
-console.log("  Totale non scontato:\t" + somma.toFixed(2));
-console.log("  Totale scontato:\t" + totscont);
+console.log("  Totale:\t" + somma.toFixed(2));
 
-console.log("\n\n")
+if(somma > 0 && core.discountedPrice2(somma,core.getUserDiscount(user.promo)) > 0){
+
+console.log(core.createDelimiter())
+   console.log("  Sconto Applicato:\t" + core.discountedPrice2(somma,core.getUserDiscount(user.promo)));
+   console.log("  Totale scontato:\t" + totscont.toFixed(2));
+   console.log("\n");
+   if(user.promo == undefined || user.promo === '')
+   console.log("");
+   else{
+   console.log("  CODICE PROMO:\t\t" + user.promo);
+   }
+console.log(core.createDelimiter()) 
+console.log("\n")
+}
 
 
-var totcred = core.calculateWallet(user.wallet,somma);
+
+
+
+var totcred = core.calculateWallet(user.wallet,totscont);
 
 console.log(core.createDelimiter3())
 console.log(   "  " + core.formatProductName(user.firstName) 
        + " " + core.formatProductName(user.lastName) 
-       + "'s remaining credit: " + core.assicuredWallet(totcred))
+       + core.assicuredWallet(totcred))
 console.log(core.createDelimiter3())
 
-console.log("\n\n");
+console.log("\n\n\n\n");
 
 }
 /*
-    + -------------------------------------------------- +
-    NOMEMACCHINA Cart - 43874
-    Mon Apr 04 2022
-    * -------------------------------------------------- *
-       [120193]    Alpi 		    22.10
-       [812302]    Firenze 		    9.99
-       [912301]    Roma 		    9.99
-       [912303]    Pisa 		    9.99
-    * -------------------------------------------------- *
-       Totale: 			  52.07
-    + -------------------------------------------------- +
-    
-    ** -------------------------------------------------- **
-       Winston Wolf ha un credito residuo di 15.25
-    ** -------------------------------------------------- **
+   + -------------------------------------------------- +
+   KOALA Cart - 43874
+   Mon Apr 04 2022
+   * -------------------------------------------------- *
+      [812302]    Firenze 		    9.99
+      [912301]    Roma 		    9.99
+      [912304]    Torino 		    9.99
+      [912303]    Pisa 		    9.99
+   * -------------------------------------------------- *
+      Totale: 			           39.96
+
+   + -------------------------------------------------- +
+      Sconto: 			            9.99
+      Totale Scontato: 		   29.97
+
+      CODICE PROMO:               SPRING
+   + -------------------------------------------------- +
+
+   ** -------------------------------------------------- **
+      Marsellus Wallace ha un credito residuo di 6.03
+   ** -------------------------------------------------- **
 */
