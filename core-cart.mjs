@@ -29,10 +29,22 @@ const formatProductList = (lista) => {
     let listaProdotti = ``;
     lista.forEach(codice => {        
         let prodotto = products.find(product => product.ean === codice);
-        listaProdotti += `\n` + `\t` + `[`
-        + prodotto.ean + `]`
+        
+        // Formattazione per le parole composte
+        let formattedName = '';
+        let multiName = prodotto.name.split(' ');
+
+        if (multiName.length > 1) {
+            for (let piece of multiName) {
+                formattedName += `${formatProductName(piece)} `;
+            }
+        } else {
+            formattedName = `${formatProductName(prodotto.name)}`;
+        }
+
+        listaProdotti += `\n` + `\t` + `[${prodotto.ean}]`
         + `\t` 
-        + `${format(prodotto.name)}` + `\t`
+        + formattedName + `\t\t`
         + prodotto.price + `\t\t\t`;
     });
     return listaProdotti;
