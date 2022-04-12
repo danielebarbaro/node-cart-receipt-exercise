@@ -1,33 +1,67 @@
 import {carts, products, promoCode, users} from "./dataset.mjs";
-import * as core from "./core-cart.mjs";
-import { Console } from "console";
+import * as core from "./core-cart.mjs"; 
 
-console.log('Promo', promoCode);
-console.log('Products', products);
-console.log('Users', users);
-console.log('Cart', carts);
+for (let cartRow of carts) { 
+    
 
-console.log('Discount', core.discountedPrice(100, 0.2));
+    let prodottiUtente = cartRow.products;
+    let UUIDCorrente = cartRow.user;
+    let totaleOrdine = 0;
+   
 
-for (let cartRow of carts) {
+    let ean = '';
+    let nomeProdotto = '';
+    let prezzoProdotto ='';
+    let rigaRicevuta = '';
 
-    // genera ricevuta
-    const {user:CartUserUUID, products}= cartRow;
-    const user = core.getUser(cartUserUUID);
+    console.log('Utente corrente', UUIDCorrente, '\n')
+    console.log('Prodotti utente corrente',prodottiUtente, '\n')
 
-    const portafoglio=user.wallet;
-    const name= user.firstName;
-    const surname=user.lastName;
+    let user = core.getUser(UUIDCorrente);
+    
+    let nomeUtente = user.firstName + ' ' + user.lastName;
+    let disponibilitaUtente = user.wallet;
+    let promoUtente = user.promo;
 
-    console.log('${name} ${surname} ha un portafoglio di ${portafoglio} euro');
-    console.log('${name} ${surname} vorrebbe comprare',products);
+    let rate = core.getPercentageFromPromoCode(promoUtente);
+   
+    console.log(`${nomeUtente} ha ${rate} di sconto`)
+    
 
-    for(currentProduct of products){
-        console.log('Voglio estrarre', currentProduct);
-        let prodotto = core.getProduct(currentProduct);
-        console.log('[${prodotto.ean}] ${prodotto.name} ${prodotto.price}')
-        //console.log('Prodotto estratto con nome:',prodotto.name)
 
+    if(prodottiUtente.lenght < 1){
+        console.log(`${nomeUtente} NON HA PRODOTTI NEL CARRELLO.`)
     }
-    console.log("Fine del nodo");
+
+
+    if(disponibilitaUtente > 0){
+        console.log('Utente si chiama',nomeUtente, '\n');
+        console.log('Utente ha disponibilità',disponibilitaUtente, 'Euro \n');
+
+    }else{
+        console.log(`${nomeUtente} ha il portafoglio VUOTO `)
+    }
+
+    for(let item of prodottiUtente){
+        let prodCorrente = core.getProduct(item);
+        let ean = prodCorrente.ean;
+        let nomeProdotto = prodCorrente.name;
+        let prezzoProdotto = prodCorrente.price;
+        let rigaRicevuta = ` \t [${ean}] \t ${nomeProdotto} \t ${prezzoProdotto}`
+
+        console.log(rigaRicevuta,'\n')
+        totaleOrdine += prezzoProdotto;
+    }
+
+    if(promoUtente === '' 
+       && promoUtente !== undefined
+       && promoUtente === null) {
+        console.log(`\t CODICE PROMO: \t\t ${promoUtente}  `);
+        let discountedPrice = core.discountedPrice(totaleOrdine, rate)
+        console.log('discountPriceValue ',discountedPriceValue);
+    }
+
+    if(disponibilitaUtente < totaleOrdine){
+        console.log(` ${nomeUtente} NON HA ABBASTANZA SOLDI PER COMPRARE.`)
+    }
 }
