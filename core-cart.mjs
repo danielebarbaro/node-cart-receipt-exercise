@@ -3,16 +3,20 @@ import {carts, products, promoCode, users} from "./dataset.mjs";
 import * as fs from "fs";
 import * as os from "os";
 
+// Calcola il prezzo scontato
 const discountedPrice = (price, rate = 0.10) => (price * (1 - rate)).toFixed(2);
 
+// Crea i "delimitatori"
 const createDelimiter = (openClose, symbol, times) => `${openClose} ${symbol.repeat(times)} ${openClose}`;
 
+// Stampa il nome dello shop
 const printShopName = () => 
     `${os.userInfo().username.toUpperCase()} - Cart ${(process.pid)}`;
 
-
+// Cerca il nome dell'utente
 const getUser = (uuid) => (users.find(user => user.uuid === uuid));
 
+// Genera la data
 const getData = () => {
     let formatData = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
     let data = new Date();
@@ -20,11 +24,13 @@ const getData = () => {
     return data.toLocaleString(`it-IT`, formatData);
 }
 
+// Forma una stringa con tutti prodotti correnti
 const formatProductList = (lista) => {
     let listaProdotti = ``;
     lista.forEach(codice => {        
         let prodotto = products.find(product => product.ean === codice);
-        listaProdotti += prodotto.ean 
+        listaProdotti += `\n` + `\t` + `[`
+        + prodotto.ean + `]`
         + `\t` 
         + prodotto.name + `\t`
         + prodotto.price + `\t\t\t`;
@@ -32,19 +38,20 @@ const formatProductList = (lista) => {
     return listaProdotti;
 }
 
-const formatProductName = (product) => product;
+// Formatta il nome all'interno dello scontrino (non ancora implementato)
+// const formatProductName = (product) => product;
 
-const AlterType = (products, type) => products;
-
+// Fa la somma dei prezzi
 const sumCartItem = (lista) => {
     let somma = 0;
     lista.forEach(codice => {
         let prodotto = products.find(product => product.ean === codice);
         somma += prodotto.price;
     });
-    return somma.toFixed(2);
+    return `\t` + `Totale:` + `  \t\t  ` + somma.toFixed(2);
 }
 
+// Stampa lo scontrino in un file "scontrinoN.txt"
 const printReceipt = (testo, contatore) => {
     fs.writeFile(`./receipt/scontrino${contatore}.txt`, testo, err => {
         if (err) console.error(err);
@@ -53,27 +60,17 @@ const printReceipt = (testo, contatore) => {
     
 }
 
-const getProductByCart = (products) => products;
-
-const getUserDiscount = () => 0;
-
-const receiptFileName = (uuid, date) => '';
-
+// Prende il prodotto
 const getProduct = (product) => products.find(product => product.ean);
 
 export {
     discountedPrice,
     printShopName,
     getUser,
-    formatProductName,
-    AlterType,
     sumCartItem,
     formatProductList,
     printReceipt,
     createDelimiter,
-    getProductByCart,
-    getUserDiscount,
-    receiptFileName,
     getProduct,
     getData
 };
