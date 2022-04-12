@@ -64,7 +64,7 @@ const totaleScontato = (currentUser, totaleNonScontato) => {
         let sconto = promoCode.find(code => code.name === currentUser.promo);
         return discountedPrice(totaleNonScontato, sconto.percentage);
     }else {
-        return 0;
+        return totaleNonScontato;
     }
 }
 
