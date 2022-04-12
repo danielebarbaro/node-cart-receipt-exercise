@@ -3,8 +3,8 @@ import {carts, products, promoCode, users} from "./dataset.mjs";
 import * as fs from "fs";
 import * as os from "os";
 
-const discountedPrice = (price, rate = 0.10 ) => (price * (1 - rate)).toFixed(2);
 
+const discountedPrice = (price, rate = 0.10 ) => (price * (1 - rate)).toFixed(2);
 //(price, rate ) => (price * (1 - rate))
 
 const getUser = (uuid) => users.find(user => user.uuid === uuid);
@@ -14,7 +14,6 @@ const getProduct = (ean) => products.find(product => product.ean === ean);
 const formatProductName = (product) => product.toLowerCase().charAt(0).toUpperCase() + product.toLowerCase().slice(1);
 
 const filterType = (products,type) => {for( pr of products) {pr.type === type ? true : false}};
-
 
 const sumCartItem = (user) => {
    var somma = 0;
@@ -35,7 +34,7 @@ const createDelimiter3 = (openClose, symbol, times) => '** ---------------------
 const calculateWallet = (wallet, totale) => wallet - totale;
 const assicuredWallet = (tot) => tot >= 0 ? tot.toFixed(2) + "€":'Empty' ;
 
-const getUserDiscount = (user) => user.promo === promoCode.name ? promoCode.percentage : null ;
+const getUserDiscount = (promo) => users.find(user => promo === promoCode.name) ;
 
 
 
