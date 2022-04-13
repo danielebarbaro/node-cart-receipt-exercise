@@ -4,14 +4,13 @@ import * as fs from "fs";
 import * as os from "os";
 
 // Calcola il prezzo scontato
-const discountedPrice = (price, rate = 0.10) => (price * (1 - rate)).toFixed(2);
+const discountedPrice = (price, rate) => (price * (1 - rate)).toFixed(2);
 
 // Crea i "delimitatori"
 const createDelimiter = (openClose, symbol, times) => `${openClose} ${symbol.repeat(times)} ${openClose}`;
 
 // Stampa il nome dello shop
-const printShopName = () => 
-    `${os.userInfo().username.toUpperCase()} - Cart ${(process.pid)}`;
+const printShopName = () => `${os.userInfo().username.toUpperCase()} - Cart ${(process.pid)}`;
 
 // Cerca il nome dell'utente
 const getUser = (uuid) => (users.find(user => user.uuid === uuid));
@@ -23,6 +22,21 @@ const getData = () => {
 
     return data.toLocaleString(`it-IT`, formatData);
 }
+
+// Cerca la percentuale della promo
+/*
+const getPercentageFromPromoCode = (promoCodeName) => {
+    if (promoCode !== `` 
+        && promoCode !== undefined
+        && promoCode !== null) {
+
+            let rate = promoCode.find(promo => promoCodeName === promo.name);
+            return rate.percentage;
+        }
+        
+    return 0;
+}
+*/
 
 // Forma una stringa con tutti prodotti correnti
 const formatProductList = (lista) => {
@@ -65,18 +79,38 @@ const sumCartItem = (lista) => {
     return somma.toFixed(2);
 }
 
+// Stampa la parte di scontrino con la promo
+const printReceiptPromo = (lista, utente) => {
+    let promo = ``;
+    let somma = sumCartItem(lista);
+    if (utente.promo !== `` && utente.promo !== undefined) {
+        let sconto = promoCode.find(codice => codice.name === utente.promo);
+        let sommaScontata = discountedPrice(somma, sconto.percentage);
+        promo = `Sconto:${`\t`.repeat(4)} ${((somma) - (sommaScontata)).toFixed(2)}\n\tTotale Scontato:\t${sommaScontata}${`\n`.repeat(2)}\tCODICE PROMO:${`\t`.repeat(2)}${sconto.name}`
+    }
+    return promo;
+}
+
+// Calcola il totale scontato
+const sumCartItemWithPromo = (utente, totale) => {
+    if (utente.promo !== `` && utente.promo != undefined) {
+        let sconto = promoCode.find(promoCode => promoCode.name === utente.promo);
+        return discountedPrice(totale, sconto.percentage);
+    } else return 0;
+}
+
 // Stampa lo scontrino in un file "scontrinoN.txt"
-const printReceipt = (testo, contatore, disponibilita) => {
+const printReceipt = (testo, contatore) => {
     fs.writeFile(`./receipt/scontrino${contatore}.txt`, testo, err => {
         if (err) console.error(err);
         return
     });
-    
 }
 
 // Prende il prodotto
-const getProduct = (product) => products.find(product => product.ean);
+//const getProduct = (product) => products.find(product => product.ean);
 
+// Funzioni esportato
 export {
     discountedPrice,
     printShopName,
@@ -85,7 +119,8 @@ export {
     formatProductList,
     printReceipt,
     createDelimiter,
-    getProduct,
     getData,
-    formatProductName
+    formatProductName,
+    printReceiptPromo,
+    sumCartItemWithPromo
 };

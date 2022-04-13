@@ -20,13 +20,16 @@ for (let cartRow of carts) {
     scontrino += core.createDelimiter(`*`, `-`, 50)
     scontrino += core.formatProductList(cartRow.products) + `\n`
     scontrino += core.createDelimiter(`*`, `-`, 50) + `\n`;
-    scontrino += `\t` + `Totale:` + `  \t\t  ` + core.sumCartItem(cartRow.products) + `\n`;
-    scontrino += core.createDelimiter(`+`, `-`, 50) + `\n` + `\n`;
+    scontrino += `\tTotale:` + `${`\t`.repeat(5)}` + core.sumCartItem(cartRow.products) + `\n`;
+    scontrino += core.createDelimiter(`+`, `-`, 50) + `\n`;
+    scontrino += `\t` + core.printReceiptPromo(cartRow.products, user) + `\n`;
     scontrino += core.createDelimiter(`**`, `-`, 50) + `\n`;
-    scontrino += `\t` + `${user.firstName} ${user.lastName} ha un credito residuo di ${((user.wallet) - core.sumCartItem(cartRow.products))}` + `\n`;
+    scontrino += `\t` + `${user.firstName} ${user.lastName} ha un credito residuo di ${((user.wallet) - core.sumCartItem(cartRow.products)).toFixed(2)}` + `\n`;
+    // Portafoglio con promo (non riesco a far uscire uno o l'altro in base alla presenza del campo promo)
+    scontrino += `\t` + `${user.firstName} ${user.lastName} ha un credito residuo di ${((user.wallet) - core.sumCartItemWithPromo(user, core.sumCartItem(cartRow.products))).toFixed(2)}` + `\n`;
     scontrino += core.createDelimiter(`**`, `-`, 50) + `\n`;
 
-    core.printReceipt(scontrino, contatore, user.wallet);
+    core.printReceipt(scontrino, contatore);
     contatore++;
     
 }
