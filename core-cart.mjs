@@ -100,8 +100,9 @@ const sumCartItemWithPromo = (utente, totale) => {
 }
 
 // Stampa lo scontrino in un file "scontrinoN.txt"
-const printReceipt = (testo, contatore) => {
-    fs.writeFile(`./receipt/scontrino${contatore}.txt`, testo, err => {
+const printReceipt = (testo, utente) => {
+    let data = getData();
+    fs.writeFile(`./receipts/${utente}_receipt_${data}.txt`, testo, err => {
         if (err) console.error(err);
         return
     });

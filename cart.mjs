@@ -29,7 +29,7 @@ for (let cartRow of carts) {
     scontrino += `\t` + `${user.firstName} ${user.lastName} ha un credito residuo di ${((user.wallet) - core.sumCartItemWithPromo(user, core.sumCartItem(cartRow.products))).toFixed(2)}` + `\n`;
     scontrino += core.createDelimiter(`**`, `-`, 50) + `\n`;
 
-    core.printReceipt(scontrino, contatore);
+    core.printReceipt(scontrino, user.uuid);
     contatore++;
     
 }
