@@ -3,9 +3,7 @@ import {carts, products, promoCode, users} from "./dataset.mjs";
 import * as fs from "fs";
 import * as os from "os";
 
-const discountedPrice = (price, rate = 0.10) => (price * (1 - rate)).toFixed(2);
-
-const helloWorld = (name => `Hello ${name}`);
+const discountedPrice = (price, rate) => (price * (1 - rate)).toFixed(2);
 
 const printShopName = () => {
     const {username} = os.userInfo();
@@ -26,7 +24,39 @@ const getPercentageFromPromocode = function (promoCodeName) {
     return 0;
 }
 
-const formatProductName = (product) => product;
+const separatore = (div, lung) => {
+    let result = ''
+        for(let index = 0; index < lung; index++){
+            if(index == 0 || index == lung-1)
+                result += div
+            else if(index == 1 || index == (lung-2))
+                result += ' '
+            else
+                result += '-'
+}
+    return result;
+}
+
+const formatArrow = (product) => product.toLowerCase().charAt(0).toUpperCase() + product.toLowerCase().slice(1);
+
+function formatProductName (productName){
+        let formattedName = '';
+
+        let multiName = productName.split(' ');
+        for (let piece of multiName) {
+            if(piece !== multiName[0]){
+                formattedName += ` `;
+            }
+            formattedName += `${formatArrow(piece)}`;
+
+        }
+        return formattedName;
+    }
+    
+
+
+
+const creditoResiduo = (portafoglio,sconto) => portafoglio-sconto;
 
 const filterType = (products, type) => product;
 
@@ -36,28 +66,29 @@ const formatProductList = (products) => products;
 
 const printReceipt = (content, filename) => '';
 
-const createDelimiter = (openClose, symbol, times) => ''
-
-const getProductByCart = (products) => products;
+const getProductByCart = (products) => products.formatProductName();
 
 const getUserDiscount = () => 0;
 
 const receiptFileName = (uuid, date) => '';
 
+
+
 export {
     discountedPrice,
-    helloWorld,
     printShopName,
     getUser,
-    formatProductName,
     filterType,
     sumCartItem,
     formatProductList,
     printReceipt,
-    createDelimiter,
     getProductByCart,
     getUserDiscount,
     receiptFileName,
     getProduct,
-    getPercentageFromPromocode
+    getPercentageFromPromocode,
+    formatArrow,
+    separatore,
+    creditoResiduo,
+    formatProductName
 };
