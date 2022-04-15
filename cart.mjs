@@ -12,18 +12,16 @@ console.log(`Price`, price);*/
 for (let cartRow of carts) {
     
     
-     console.log(`riga del carrello da stampare`, cartRow)
+    // console.log(`riga del carrello da stampare`, cartRow)
 
      let prodottoUtente = cartRow.products;
      let UUIDCorrente = cartRow.user;
      let TotaleOrdine =0;
      
-     
-     
      let ean =``;
      let nomeProdotto=``;
      let prezzoProdotto=``;
-     
+     console.log(`*------------------------------------------*`);
      console.log(`utente corrente`, UUIDCorrente, `\n`)
      //console.log(`prodotti utente corrente`, prodottoUtente, `\n`)
      
@@ -36,19 +34,24 @@ for (let cartRow of carts) {
      
      if(prodottoUtente.length<1){
          console.log(`${nomeUtente} non ha prodotti nel carrello `)
+         console.log(`*------------------------------------------*`);
      }
 
 
      if(disponibilitaUtente>0){
-         console.log(`${nomeUtente} ha il portafoglio pieno`)
          console.log(`utente si chiama:`, nomeUtente, `\n`);
+         //console.log(`${nomeUtente} ha il portafoglio pieno`)
      console.log(`utente ha  disponibile`, disponibilitaUtente, ` Euro\n`);
+     console.log(`*------------------------------------------*`);
 
 
      }else {
          console.log(`${nomeUtente} ha il portafoglio vuoto`)
+         console.log(`*------------------------------------------*`);
      }
      
+
+
      for(let cartRow of prodottoUtente){
 
         let prodCorrente= core.getProduct(cartRow);
@@ -57,45 +60,29 @@ for (let cartRow of carts) {
         let prezzoProdotto=prodCorrente.price;
         let rigaRicevuta = `\t[${ean}] \t\t ${nomeProdotto} \t ${prezzoProdotto}`
         console.log(rigaRicevuta, `\n`);
-        TotaleOrdine-= prezzoProdotto;
+        TotaleOrdine+= prezzoProdotto;
+        //let discountedPriceValue = core.discountedPrice(TotaleOrdine);
+        //console.log(`\t Totale`, discountedPriceValue);
      }
 
-     if(promoUtente !== `` 
-        && promoUtente !== undefined
-        && promoUtente !==null){
+     if(promoUtente !== ``  && promoUtente !== undefined && promoUtente !==null){
 
-            let rate = core.getPercentagefromPromocode(promoUtente);
-
-     console.log(`${nomeUtente} ha ${rate} di  sconto `)
-         console.log(` \t codice rpromo \t\t${nomeUtente}`);
-         let discountedPriceValue = core.discountedPrice(TotaleOrdine, rate);
-         console.log(`discountPriceValue`, discountedPriceValue);
+        let rate = core.getPercentagefromPromocode(promoUtente);
+        console.log(`*------------------------------------------*`);
+        console.log(`${nomeUtente} ha ${rate} di  sconto `)
+         console.log(` \t codice promo \t\t${nomeUtente}`);
+         console.log(`*------------------------------------------*`);
+         let discountedPriceValue = core.discountedPrice(TotaleOrdine);
+         
+         console.log(`\t Totale`, discountedPriceValue);
+         console.log(`*------------------------------------------*`);
+         let residuovalue= core.residuo(discountedPriceValue);
+         console.log(`\t${nomeUtente} ha il credito residuo`, residuovalue);
+         console.log(`*------------------------------------------*`);
      }
      if(disponibilitaUtente <= TotaleOrdine){
          console.log(`${nomeUtente} non ha abbastanza soldi`)
+         console.log(`*------------------------------------------*`);
      }
     // genera ricevuta
 }
-/* 
-    let cartUserUUID = cartRow.user;
-    let products = cartRow.products;
-    //const {user: cartUserUUID, products} = cartRow;
-    const user = core.getUser(cartUserUUID);
-    //const {uuid, firstName, lastName, wallet, isTeacher, promo} = user;
-    const portafoglio =user.wallet;
-    const name=user.firstName;
-    const surname=user.lastName;
-    console.log(`${name} ${surname} ha un portafoglio di ${portafoglio} euro`);
-    console.log(`${name} ${surname} vorrebbe comprare`, products);
-for(let curretProduct of products){
-    console.log(`voglio  estrarre`, currentProduct);
-    let prodotto = core.getProduct(currentProduct);
-    console.log(`[${prodotto.ean}] ${prodotto.name} ${prodotto.price} `)
-}
-    products.forEach(product =>   {
-        let prodotto = core.getProduct(product);
-        console.log(`prodotto`, prodotto);
-    })
-   let prodottoCorrente = core.getProductByCart(productId);
-    // console.log("UUID", uuid)
-    // console.log("Prodotti", prodotti )*/
