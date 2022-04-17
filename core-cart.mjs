@@ -29,8 +29,26 @@ const getUser=function(uuid){
 }*/
 //funzione anonima
 const getProduct=function(ean){
-    let product=product.fint(product=>ean===product.ean);
+    let product=products.find(product=>ean===product.ean);
     return product;
+}
+
+const getPercentageFromPromoCode = function(promoCodeName){
+    if (promoCodeName!=='' && promoCodeName!==undefined && promoCodeName!==null){
+        let sconto=promoCode.find(item=>promoCodeName===item.name);
+        return sconto.percentage;
+    }
+    return 0;
+}
+
+const maiuscoloNome = function(stringa){
+    return`${stringa[0].toUpperCase()}${stringa.substring(1).toLowerCase()}`
+}
+
+const maiuscoloParole = function(stringa){
+    let nuovastringa=[];
+    stringa.split(' ').forEach(parola =>  nuovastringa.push(maiuscoloNome(parola)));
+    return nuovastringa.join("");
 }
 
 
@@ -38,4 +56,8 @@ export {
     discountedPrice,
     getUser,
     getProduct,
+    getPercentageFromPromoCode,
+    maiuscoloNome,
+    maiuscoloParole,
+    fs,
 };
