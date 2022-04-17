@@ -77,7 +77,7 @@ for (let cartRow of carts) {
                 let prezzo=oggetto.price;
                 let codice=oggetto.ean;
                 let nomeoggetto=oggetto.name;
-                ricevuta+=core.maiuscoloParole(`[${codice}] ${nomeoggetto} ${prezzo.toFixed(2)}`);
+                ricevuta+=core.maiuscoloParole(`[${codice}]\t${nomeoggetto}\t${prezzo.toFixed(2)}`);
                 ricevuta+=`\n`
             }
 
