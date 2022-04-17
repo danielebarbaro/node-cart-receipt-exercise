@@ -7,7 +7,6 @@ import * as core from "./core-cart.mjs";
 //console.log('Cart', carts);
 
 //console.log('Discount', core.discountedPrice(100, 0.2));
-
 var dir = './receipts';
 
 if (!core.fs.existsSync(dir)){
