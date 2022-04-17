@@ -1,6 +1,7 @@
 import {carts, products, promoCode, users} from "./dataset.mjs";
 import * as core from "./core-cart.mjs";
 
+
 for(let item of carts){
     
     let prodottiUtente = item.products;
@@ -22,10 +23,12 @@ for(let item of carts){
     else{
         
     //INTESTAZIONE SCONTRINO
+        console.log(core.printShopName())
         console.log(core.heading())
-        console.log(core.righe(del2))
+        console.log(core.righe(del1))
     //NOME UTENTE
-        console.log(`${nomeUtente}\nDisponibilità: ${disponibilitaUtente}\n`)
+        console.log(`${nomeUtente}\nDisponibilità: ${disponibilitaUtente}`)
+        console.log(core.righe(del2))
 
     //CARRELLO
         let tot=0;
@@ -45,9 +48,7 @@ for(let item of carts){
         console.log(core.righe(del2))
 
     //TOTALE    
-        console.log(`\nTotale\t\t\t\t\t\t${tot.toFixed(2)}`)
-    
-        
+        console.log(`Totale\t\t\t\t\t\t${tot.toFixed(2)}`)
         console.log(core.righe(del1))
 
     //EVENTUALE SCONTO
@@ -58,6 +59,8 @@ for(let item of carts){
         if(user.promo!=undefined && user.promo!='' && user.promo!= null){
             console.log(`Sconto \t\t\t\t\t\t  ${discount.toFixed(2)}`)
             console.log(`Totale Scontato :\t\t\t\t ${discountedTot}`)
+
+            console.log(`\nCODICE PROMO: \t\t\t\t\t${discountPromo}`)
             console.log(core.righe(del1))
         }
 
@@ -86,5 +89,4 @@ for(let item of carts){
     console.log('\n\n')
 
 }
-
 

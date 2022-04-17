@@ -1,24 +1,14 @@
 import {carts, products, promoCode, users} from "./dataset.mjs";
-
-import * as fs from "fs";
 import * as os from "os";
-import { moveMessagePortToContext } from "worker_threads";
 
 //INTESTAZIONE SCONTRINO
+const printShopName = () => {
+    const {username} = os.userInfo();
+    return `${username.toUpperCase()} - Cart ${process.pid}`;
+}
 const heading = function(){
-    let nMacchina='NOMEMACCHINA Cart - 43874\n'
-    let dateFormat = new Intl.DateTimeFormat('en-US',{
-        weekday:'short',
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-    
-        timeZone:'Europe/Rome'
-    })
-    let date= new Date()
-    
-    return nMacchina + dateFormat.format(date)
-
+    let d = new Date()
+    return d.toDateString()
 }
 
 
@@ -87,5 +77,6 @@ export{
     getProduct,
     formatCart,
     righe,
-    heading
+    heading,
+    printShopName
 }
