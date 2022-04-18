@@ -4,9 +4,9 @@ import * as fs from "fs";
 import * as os from "os";
 
 
-const discountedPrice = (price, rate = 0.10 ) => (price * (1 - rate)).toFixed(2);
-const discountedPrice2 = (price, rate = 0.10 ) => (price * rate).toFixed(2);
-//(price, rate ) => (price * (1 - rate))
+const discountedPrice = (price, rate ) => ((price * (1 - rate))).toFixed(2);
+const scontoApplicato = (prezzo, sconto) => (prezzo*(sconto*100))/100
+//(100, 0.25 ) => (100 * (1 - 0.25))
 
 const getUser = (uuid) => users.find(user => user.uuid === uuid);
 
@@ -18,32 +18,37 @@ const filterType = (products,type) => {for( pr of products) {pr.type === type ? 
 
 const sumCartItem = (user) => {
    var somma = 0;
-for (let cartRow of carts) {
-   if (user.uuid == cartRow.user)
+for (let product of carts) {
+   if (user.uuid == product.user)
    {
-      cartRow.products.forEach(product =>
-      somma += core.getProduct(product).price)
+      product.products.forEach(prodo =>
+      somma += getProduct(prodo).price)
    }
 }
 return somma;
 }
 
-const createDelimiter = (openClose, symbol, times) => '+ -------------------------------------------------- +';
-const createDelimiter2 = (openClose, symbol, times) => '* -------------------------------------------------- *';
-const createDelimiter3 = (openClose, symbol, times) => '** -------------------------------------------------- **';
+const createDelimiter = (openClose, symbol, times) => '+ ' + '-'.repeat(50) + ' +';
+const createDelimiter2 = (openClose, symbol, times) => '* ' + '-'.repeat(50) + ' *';
+const createDelimiter3 = (openClose, symbol, times) => '** ' + '-'.repeat(50) + ' **';
 
 const calculateWallet = (wallet, totale) => wallet - totale;
-const assicuredWallet = (tot) => tot >= 0 ? "'s remaining credit: " + tot.toFixed(2) + "€":' has not enough money for this order' ;
+const assicuredWallet = (tot) => tot >= 0 ? "'s remaining credit: " + tot.toFixed(2) + "€": false ;
+const walletTrueFalse = (wallet,somma) => wallet-somma >= 0 ? true  :  false;
 
-const getUserDiscount = function (promo) {
+const getUserDiscount = function (promo) { 
    if(promo == '' || promo == undefined)
    return 0
-   else{
-    users.find(promo => promo === promoCode.name) 
-   return promoCode.percentage
+   else {
+      for (let codice of promoCode){
+         if (codice.name === promo)
+          return codice.percentage
+      }
+   
    }
    };
 
+const printReceipt = (content, filename) => fs.writeFileSync(filename, content);
 
 
 
@@ -60,7 +65,9 @@ export {
     calculateWallet,
     getUserDiscount,
     assicuredWallet,
-    discountedPrice2,
+    scontoApplicato,
+    walletTrueFalse,
+    printReceipt,
 };
 
 /*
