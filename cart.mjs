@@ -7,10 +7,11 @@ import * as core from "./core-cart.mjs";
 //console.log('Cart', carts);
 
 //console.log('Discount', core.discountedPrice(100, 0.2));
+//const fs = require('fs');
+import fs from 'fs';
 var dir = './receipts';
-
-if (!core.fs.existsSync(dir)){
-        core.fs.mkdirSync(dir);
+if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
     }
 
 for (let cartRow of carts) {
@@ -45,8 +46,8 @@ for (let cartRow of carts) {
    if (prodottiUtente.length>0){
         let portafoglio=user.wallet;
         let totale=0;
-        for (let oggetta of prodottiUtente){
-            let oggetto=core.getProduct(oggetta);
+        for (let oggetti of prodottiUtente){
+            let oggetto=core.getProduct(oggetti);
             let prezzo=oggetto.price;
             totale=prezzo+totale;
         }
@@ -62,12 +63,12 @@ for (let cartRow of carts) {
 
             var today  = new Date();
             var options = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
-            const data=`${today.toLocaleDateString("en-US", options)}`;
+            const data=`${today.toLocaleDateString("it-IT", options)}`;
 
-            const dataOra=`${today.toLocaleTimeString("en-US",options)}`;
+            //const dataOra=`${today.toLocaleTimeString("en-US",options)}`;
             const trattino='-';
             ricevuta+=`+${trattino.repeat(50)}+\n`
-            ricevuta+=`NOMEMACCHINA Cart - 43874\n`;
+            ricevuta+=`${core.printShopName()}\n`;
             ricevuta+=`${data}\n`;
             ricevuta+=`*${trattino.repeat(50)}*\n`;
 
@@ -77,13 +78,14 @@ for (let cartRow of carts) {
                 let prezzo=oggetto.price;
                 let codice=oggetto.ean;
                 let nomeoggetto=oggetto.name;
-                ricevuta+=core.maiuscoloParole(`[${codice}]\t${nomeoggetto}\t${prezzo.toFixed(2)}`);
+               
+                ricevuta+=(`${codice}\t${core.maiuscoloParole(nomeoggetto)}\t${prezzo.toFixed(2)}`);
                 ricevuta+=`\n`
             }
 
             //stampa totale
             ricevuta+=`*${trattino.repeat(50)}*\n`;
-            ricevuta+=`totale: ${totale.toFixed(2)}\n`;
+            ricevuta+=`Totale: ${totale.toFixed(2)}\n`;
             ricevuta+=`+${trattino.repeat(50)}+\n`;
 
 
@@ -107,8 +109,8 @@ for (let cartRow of carts) {
             ricevuta+=``;
             ricevuta+=`**${trattino.repeat(50)}**\n`;
 
-           
-            core.fs.writeFileSync(`./receipts/${uuid}_receipt_${data}.txt`,ricevuta);
+            
+            fs.writeFileSync(`./receipts/${uuid}_receipt_${data}.txt`,ricevuta);
         }
     }
     console.log(ricevuta);

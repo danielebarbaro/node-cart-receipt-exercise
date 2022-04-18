@@ -1,15 +1,18 @@
 +--------------------------------------------------+
-NOMEMACCHINA Cart - 43874
-Sun, April 17, 2022
+MARLLAAAA - Cart 18376
+lun 18 aprile 2022
 *--------------------------------------------------*
-[204139]	monteEverest	52.10
+812302	Firenze	9.99
+912301	Roma	9.99
+912304	Torino	9.99
+912303	Pisa	9.99
 *--------------------------------------------------*
-totale: 52.10
+Totale: 39.96
 +--------------------------------------------------+
-Sconto: 5.21
-Totale scontato: 46.89
+Sconto: 9.99
+Totale scontato: 29.97
  
-CODICE PROMO: PROMO-10
+CODICE PROMO: SPRING
 **--------------------------------------------------**
-Buddy Holly ha un credito residuo 0.01
+Marsellus Wallace ha un credito residuo 6.03
 **--------------------------------------------------**

@@ -2,7 +2,7 @@ import {carts, products, promoCode, users} from "./dataset.mjs";
 
 import * as fs from "fs";
 import * as os from "os";
-import { randomUUID } from "crypto";
+
 
 const discountedPrice = (price, rate = 0.10) => (price * (1 - rate)).toFixed(2);
 
@@ -48,7 +48,12 @@ const maiuscoloNome = function(stringa){
 const maiuscoloParole = function(stringa){
     let nuovastringa=[];
     stringa.split(' ').forEach(parola =>  nuovastringa.push(maiuscoloNome(parola)));
-    return nuovastringa.join("");
+    return nuovastringa.join(" ");
+}
+
+const printShopName = () => {
+    const {username} = os.userInfo();
+    return `${username.toUpperCase()} - Cart ${process.pid}`;
 }
 
 
@@ -59,5 +64,6 @@ export {
     getPercentageFromPromoCode,
     maiuscoloNome,
     maiuscoloParole,
-    fs,
+    printShopName,
+    
 };
