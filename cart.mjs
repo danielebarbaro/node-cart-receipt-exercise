@@ -1,84 +1,101 @@
 import {carts, products, promoCode, users} from "./dataset.mjs"; // i dati sono presenti in dataset.mjs
 import * as core from "./core-cart.mjs";                        // i metodi e ciò che è presente in core-cart.mjs può essere richiamato in cart.mjs scrivendo "core" prima del nome 
                                                                // della cosa da richiamare. Un po' come "ereditarli" da un' altra classe
-console.log('Promo', promoCode);
-console.log('Products', products);
-console.log('Users', users);
-console.log('Cart', carts);
 
-console.log('Discount',core.discountedPrice(200, 0.20));
-
-for (let cartRow of carts) {        // of vuol dire "fammi vedere l' oggetto del carrello". Se andiamo a vedere il file dataset vediamo che ogni cart contiene id utente e prodotti. 
-    console.log('INIZIO DEL NODO')                          // questo for cicla i carrelli e stampa quelle proprietà
-    console.log('Riga del carrello da stampare', cartRow); // cartRow si riferisce alla riga del carrello che stiamo ciclando (nell' insieme dei carts)
-
-    let prodottiUtente = cartRow.products; // prodottiUtente è un array di prodotti
-    let UUIDCorrente = cartRow.user;       // per ogni oggetto nel carrello voglio accedere alle proprietà dell' utente e dei prodotti. E salvarle in 2 variabili: UUIDCorrente e ProdottiUtente
-    let totaleOrdine = 0;                 // inizializzo il totale ordine a 0
-    
-
-    let ean ='';
-    let nomeProdotto = '';
-    let prezzoProdotto = '';
-
-    //console.log('Utente corrente', UUIDCorrente,'\n');
-    //console.log('Prodotti utente corrente', prodottiUtente, '\n');
-
-    let user = core.getUser(UUIDCorrente); // uso il metodo getUser che ho creato in core-cart.mjs. getUser serviva a restituire tutti i dati dell' utente che corripsonde all' id passato.
-    //console.log('Utente completo', user);
-
-    //let nomeUtente = `${user.firstName} + '' + ${user.lastName}`; // come la riga sotto ma scritta coi backtick
-    let nomeUtente = user.firstName + '' + user.lastName; // creo una variabile che contiene il nome e cognome dell' utente. Scritta con i + come facciamo in java e C#
-    let disponibilitaUtente = user.wallet;
-    let promoUtente = user.promo;
-    
-
-    
-    
-
-    //console.log(`${nomeUtente} ha un codice sconto `);
-    //console.log(`${nomeUtente} ha un buono sconto del ${rate}%`);
-
-    if(prodottiUtente.length < 1){ // se il carrello dell' utente ha prodotti, può acquistare. il .length abbinato ad un array (come prodottiUtente ritorna il numero di righe contenute in un array. I prodotti nel carrello erano tra []. una riga = 1 prodotto.
-    console.log(`${nomeUtente} non ha prodotti nel carrello.`);
+import fs from 'fs';
+var dir = './receipts';
+if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
     }
 
-    if(disponibilitaUtente > 0){
-        console.log(`${nomeUtente} ha il portafoglio pieno`);
-        console.log('Utente si chiama: ', nomeUtente, '\n');
-        console.log('Utente ha disponibile: ', disponibilitaUtente, 'Euro \n');
+for (let cartRow of carts) {    
+    // of vuol dire "fammi vedere l' oggetto del carrello". Se andiamo a vedere il file dataset vediamo che ogni cart contiene id utente  
+    // e prodotti. questo for cicla i carrelli e stampa quelle proprietà cartRow si riferisce alla riga del carrello che stiamo ciclando (nell' insieme dei carts)
+                              
     
-    }else{
-        console.log(`${nomeUtente} ha il portafoglio vuoto`);
-    }
+    let user = core.getUser(cartRow.user);
+    let uuid = user.uuid;
+    let nome = user.firstName;
+    let cognome = user.lastName;
+    let prodottiUtente = cartRow.products;
+    let promo = user.promo;
+    let sconto = core.getPercentageFromPromoCode(promo);
+    let scontoEffettivo;
+    let totaleScontato;
+    let residuo;
+    let ricevuta = '';
 
-    for (let item of prodottiUtente ) {
-        let prodCorrente = core.getProduct(item); // uso il metodo getProduct che ho creato in core-cart.mjs. getProduct serviva a restituire tutti i dati del prodotto che corripsonde all' id passato.
-        console.log(prodCorrente);                                                  
-         ean = prodCorrente.ean;                     // ean di un prodotto. ad es: [120193]
-         nomeProdotto = prodCorrente.name;           // nome di un prodotto ad es: Alpi
-         prezzoProdotto = prodCorrente.price;        // prezzo di un prodotto ad es: 22.10
-        let rigaRicevuta = `\t [${ean}] \t\t ${nomeProdotto} \t ${prezzoProdotto}`; // creo una riga che contiene l' ean, il nome e il prezzo del prodotto.
-        totaleOrdine += prezzoProdotto;              // aggiungo il prezzo del prodotto all' importo totale dell' ordine.
+    
+    
 
-        if (promoUtente  !== '' 
-        && promoUtente !== undefined 
-        && promoUtente !== null) {
-            let rate = core.getPercentageFromPromoCode(promoUtente); // uso il metodo getPercentageFromPromoCode che ho creato in core-cart.mjs. getPercentageFromPromoCode serviva a restituire il valore del buono sconto promozionale passato come parametro.
-            console.log(`\t Codice promo: \t\t ${promoUtente}`);
-            let discountedPriceValue = core.discountedPrice(totaleOrdine, rate);
-            console.log(` Prezzo scontato:`, discountedPriceValue);
+    if(prodottiUtente.length > 0 ) {               // se il carrello dell' utente ha prodotti, può acquistare. il .length abbinato ad un array (come prodottiUtente 
+        let totale = 0;                            // ritorna il numero di righe contenute in un array. I prodotti nel carrello erano tra []. una riga = 1 prodotto.
+        let portafoglio=user.wallet;
+
+        for (let oggetti of prodottiUtente) {
+            let oggetto = core.getProduct(oggetti);
+            let prezzo = oggetto.price;
+            totale = prezzo + totale;
         }
-         
-
-        console.log(rigaRicevuta, '\n');
-
-        if (disponibilitaUtente < totaleOrdine) {
-            console.log(`${nomeUtente} non ha abb. soldi per comprare`);
-        
-        }
-        
-        // per fare le righe per delimitare gli scontrini *--------* e +--------+ usare la funzione .repeat
-    }
+        scontoEffettivo = sconto * totale;
+        totaleScontato = totale - scontoEffettivo;
+        residuo = portafoglio - totaleScontato;
     
+
+        if((portafoglio + scontoEffettivo) > totale) {                    // inizia stampa scontrino se il portafoglio dell' utente, al netto degli sconti, è maggiore del totale
+        
+        var today = new Date();                                                             // crea un oggetto tipo Date
+        var options = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }; // imposta le opzioni per la stampa della data
+        const dataOggi = `${today.toLocaleDateString("it-IT", options)}`;                   // converti in stringa la data, in formato italiano gg mm aaaa       
+        const currentTime = `${today.getHours()}-${today.getMinutes()}-${today.getSeconds()}`; // stringa con l' ora attuale, hh-mm-ss da usare nel nome file
+        
+        
+        // per fare i +---------+ e *----------* contributo da: Marcello Borio
+        const delimitatore = '-';
+            ricevuta += `+${delimitatore.repeat(50)}+\n`
+            ricevuta += `${core.printShopName()}\n`;
+            ricevuta += `${dataOggi}\n`;
+            ricevuta += `*${delimitatore.repeat(50)}*\n`;
+
+            // per stampare prezzo, codice e nome prodotto
+            for(let a of prodottiUtente) {
+                let oggetto = core.getProduct(a);
+                let prezzo = oggetto.price;    
+                let codice = oggetto.ean;
+                let nomeOggetto = oggetto.name;    
+       
+                ricevuta += (`${codice}\t${core.maiuscoloParole(nomeOggetto)}\t${prezzo.toFixed(2)}`);
+                ricevuta += `\n`
+            }    
+
+            // stampa il totale, incorniciato coi delimitatori
+            ricevuta += `*${delimitatore.repeat(50)}*\n`;
+            ricevuta += `Totale: ${totale.toFixed(2)}\n`;
+            ricevuta += `+${delimitatore.repeat(50)}+\n`;
+
+            
+            // per stampare lo sconto, se presente, e il credito residuo
+            if (sconto !==0 ){
+                ricevuta += `Sconto: ${scontoEffettivo.toFixed(2)}\n`;
+                ricevuta += `Totale scontato: ${totaleScontato.toFixed(2)}\n`;
+                ricevuta += ` \n`;
+                ricevuta += `Codice Promo: ${promo}\n`;
+                ricevuta += `**${delimitatore.repeat(50)}**\n`;
+                ricevuta += `${nome} ${cognome} ha un credito residuo ${residuo.toFixed(2)}\n`;
+            }
+            else // se non c'è sconto, stampa solo il credito residuo
+            {
+                let residuo = portafoglio - totale;
+                ricevuta += `${nome} ${cognome} ha un credito residuo ${residuo.toFixed(2)}\n`;
+            }
+
+            ricevuta += ``;
+            ricevuta += `**${delimitatore.repeat(50)}**\n`;
+
+            fs.writeFileSync(`./receipts/${uuid}_receipt_${dataOggi}_${currentTime}.txt`,ricevuta);
+        }              
+
+    } 
+    console.log(ricevuta);
 }
+    
