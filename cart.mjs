@@ -1,75 +1,112 @@
 import {carts, products, promoCode, users} from "./dataset.mjs";
 import * as core from "./core-cart.mjs"; //estensione può essere mjs o js per aver facilità nell'importare i dati e le funzionalità
+import { discountedPrice } from "./core-cart.mjs";
 
 
 
 
-for (let cartRow of carts) { //quale utente appartiene questo carrelo e quali prodotti ha comprato l'utente
+for (let cartRow of carts) { //in questo for viene indicato: quale utente appartiene questo carrello e quali prodotti ha comprato l'utente
     
-
-    //console.log('RIGA DEL CARRELLO DA STAMPARE', cartRow, '\n')
     let prodottiUtente = cartRow.products;
     let UUIDCorrente = cartRow.user;
     let totaleOrdine = 0;
-   
-
+  
     let ean = ' ';
     let nomeProdotto = ' ';
-    let prezzoProdotto =' ';
+    let prezzoProdotto = ' ';
     let rigaRicevuta = ' ';
 
-    console.log('Utente corrente', UUIDCorrente, '\n')
-    console.log('Prodotti utente corrente',prodottiUtente, '\n')
-
     let user = core.getUser(UUIDCorrente);
-    //  console.log('Utente completo',user, '\n');
-    
+
     let nomeUtente = user.firstName + ' ' + user.lastName;
     let disponibilitaUtente = user.wallet;
     let promoUtente = user.promo;
 
-    let rate = core.getPercentageFromPromoCode(promoUtente);
-   
-    console.log(`${nomeUtente} ha ${rate} di sconto`)
     
+    //intestazione ricevuta
+    console.log('\n')
+    const cornice = '-';
+    console.log(`+ ${cornice.repeat(50)} +`)
+    console.log(core.printShopName());
 
-
-    if(prodottiUtente.lenght < 1){
-        console.log(`${nomeUtente} NON HA PRODOTTI NEL CARRELLO.`)
+    //inserimento della data
+    let  optionsData = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+    let day  = new Date();
+    console.log(day.toLocaleString(`it-IT`, optionsData)); 
+    console.log(`* ${cornice.repeat(50)} *`)
+    
+    //elenco prodotti utente 
+    if(prodottiUtente < 1){
+      
+        console.log(`  ${nomeUtente} NON HA PRODOTTI NEL CARRELLO.`)
+        
     }
-
-
-    if(disponibilitaUtente > 0){
-        //console.log(`${nomeUtente}, ha il portafoglio pieno `)
-        console.log('Utente si chiama',nomeUtente, '\n');
-        console.log('Utente ha disponibilità',disponibilitaUtente, 'Euro \n');
-
-    }else{
-        console.log(`${nomeUtente} ha il portafoglio VUOTO `)
-    }
-
     for(let item of prodottiUtente){
+        
+
         let prodCorrente = core.getProduct(item);
         let ean = prodCorrente.ean;
-        let nomeProdotto = prodCorrente.name;
+        let nomeProdotto = core.formatProductName(prodCorrente.name);
         let prezzoProdotto = prodCorrente.price;
-        let rigaRicevuta = ` \t [${ean}] \t ${nomeProdotto} \t ${prezzoProdotto}`
-
+        
+        let rigaRicevuta =`   [${ean}]  ${nomeProdotto}   \t      ${prezzoProdotto.toFixed(2)}`
+       
         console.log(rigaRicevuta,'\n')
-        totaleOrdine += prezzoProdotto;
+        totaleOrdine += prezzoProdotto;   
     }
 
-    if(promoUtente === '' 
+    //calcolo del totale ordine
+    totaleOrdine += prezzoProdotto;
+    console.log(`* ${cornice.repeat(50)} *`) 
+    console.log(`   Totale:                     ${Number.parseFloat(totaleOrdine).toFixed(2)}`);
+    console.log(`+ ${cornice.repeat(50)} +`)
+
+    //calcolo dell'importo scontato e il totale scontato se presente
+    let rate = core.getPercentageFromPromoCode(promoUtente);
+
+    if(promoUtente !== '' 
        && promoUtente !== undefined
-       && promoUtente === null) {
-        console.log(`\t CODICE PROMO: \t\t ${promoUtente}  `);
-        let discountedPrice = core.discountedPrice(totaleOrdine, rate);
-        console.log('discountPriceValue ',discountedPriceValue);
-    }
+       && promoUtente !== null) {
+        
+            let discountedPrice = core.discountedPrice(totaleOrdine, rate)
+            let discountedPriceValue = totaleOrdine - discountedPrice;
+            
+           
+            console.log(`   Sconto:                     ${Number.parseFloat(discountedPriceValue).toFixed(2)} `);
+            console.log(`   Totale Scontato:            ${discountedPrice}`);
+            
+            console.log(`\n\n   CODICE PROMO: \t ${promoUtente} `);
+            console.log(`+ ${cornice.repeat(50)} +\n`)
+        
+        }
+        
+       
+        console.log(`\n**${cornice.repeat(50)}**`)
+        //calcolo inerente al credito residuo
+        if(promoUtente !== '' 
+       && promoUtente !== undefined
+       && promoUtente !== null) {
+      
+  
 
-    if(disponibilitaUtente < totaleOrdine){
-        console.log(` ${nomeUtente} NON HA ABBASTANZA SOLDI PER COMPRARE.`)
-    }
-   
-   
+        if(disponibilitaUtente < discountedPrice)
+            console.log(`${nomeUtente} non ha abbastanza soldi per comprare.`)
+        else{
+            let prezzoScontato = core.discountedPrice(totaleOrdine, rate)
+            let creditoResiduo = (disponibilitaUtente - prezzoScontato);
+          
+            console.log(`   ${nomeUtente}`,'ha un credito residuo di', Number.parseFloat(creditoResiduo).toFixed(2));
+            }
+        }
+        else{
+            if(disponibilitaUtente < totaleOrdine){
+                console.log(` ${nomeUtente} non ha abbastanza soldi per comprare.`)
+            }
+            else{
+                let creditoResiduo = (disponibilitaUtente - totaleOrdine);
+                console.log(`   ${nomeUtente}`,'ha un credito residuo di', Number.parseFloat(creditoResiduo).toFixed(2)); 
+            }    
+}
+//console.log('RIGA DEL CARRELLO DA STAMPARE', cartRow, '\n')
+console.log(`**${cornice.repeat(50)}**`)  
 }
