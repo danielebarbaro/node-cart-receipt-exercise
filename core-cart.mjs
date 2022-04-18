@@ -59,11 +59,16 @@ const getPercentageFromPromoCode = function (promoCodeName){
     }
     return 0;
 }
-const formatProductName = (product) => product;
+
+//const formatProductName = (product) => product;
+const formatProductName = (product) => {
+    return product.toLowerCase().charAt(0).toUpperCase() + product.toLowerCase().slice(1)
+}
+
 
 const filterType = (products, type) => product;
 
-const sumCartItem = (products) => (products);
+const sumCartItem = (products)=> products;
 
 const formatProductList = (products) => products;
 
