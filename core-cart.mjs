@@ -1,20 +1,43 @@
-import {carts, products, promoCode, users} from "./dataset.mjs";
+import {carts, products, promoCode, users} from "./dataset.mjs"; //
 
-import * as fs from "fs";
-import * as os from "os";
+import * as fs from "fs"; //file system (fs)
+import * as os from "os"; //sistema operativo (os)
 
 const discountedPrice = (price, rate = 0.10) => (price * (1 - rate)).toFixed(2);
 
 const helloWorld = (name => `Hello ${name}`);
+
+
+
+//funzione iterativa
+function getUser(uuid){
+    let user = users.find(user => uuid === user.uuid);
+    return user;
+}
+
+
+const getProduct = (productId) => products.find(product => product.ean === productId)
+
+const getPercentageFromPromoCode = function (promoCodeName){
+
+    if(promoCodeName !== '' 
+       && promoCodeName !== undefined
+       && promoCodeName !== null) {
+
+    let rate = promoCode.find(item => promoCodeName === item.name);
+    return rate.percentage;
+    }
+    return 0;
+    
+    
+}
+
 
 const printShopName = () => {
     const {username} = os.userInfo();
     return `${username.toUpperCase()} - Cart ${process.pid}`;
 }
 
-const getUser = (uuid) => users.find(user => user.uuid === uuid);
-
-const getProduct = (productId) => products.find(product => product.ean === productId)
 
 const formatProductName = (product) => product;
 
@@ -48,6 +71,6 @@ export {
     getProductByCart,
     getUserDiscount,
     receiptFileName,
-    getProduct
+    getProduct,
+    getPercentageFromPromoCode
 };
-
