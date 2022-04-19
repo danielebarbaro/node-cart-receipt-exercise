@@ -3,9 +3,7 @@ import {carts, products, promoCode, users} from "./dataset.mjs";
 import * as fs from "fs";
 import * as os from "os";
 
-console.log('MATTEOPC');
-
-const discountedPrice = (price, rate = 0.10) => (price * (1 - rate)).toFixed(2);
+const discountedPrice = (price, rate) => (price * (1 - rate)).toFixed(2);
 
 //arrow function
 //const getUser = (uuid) => users.find(user => user.uuid === uuid);
@@ -36,7 +34,7 @@ const getPercentagefromPromocode = function (promoCodeName){
     && promoCodeName !==null){
        
        let rate = promoCode.find(promo => promoCodeName === promo.name);
-       console.log(rate)
+       
        return rate.percentage;
     
     
@@ -45,9 +43,26 @@ const getPercentagefromPromocode = function (promoCodeName){
     return 0;
 }
 
+const delimitatore = function (apertura, simbolo, n) {
+
+    return `${apertura} ${simbolo.repeat(n)} ${apertura}` 
+}
+
+const nomeMacchina = () => `${os.userInfo().username.toUpperCase()} Cart - ${(process.pid)} `
+
+const oggiData = () => {
+    let formatodata = {weekday: `short`, year: `numeric`, month: `short`, day: `numeric`}
+    let data = new Date();
+    return data.toLocaleString(`it-IT`, formatodata);
+}
+
+
 export {
     discountedPrice,
     getUser,
     getPercentagefromPromocode,
-    getProduct
+    getProduct,
+    delimitatore,
+    nomeMacchina,
+    oggiData
 };
