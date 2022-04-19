@@ -111,7 +111,7 @@ const promoCode = [
     },
     {
         name: 'SPRING',
-        percentage: 0.25
+        percentage: 9.99
     },
     {
         name: 'FULL',

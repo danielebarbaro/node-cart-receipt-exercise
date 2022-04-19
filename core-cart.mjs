@@ -5,26 +5,15 @@ import * as os from "os";
 
 console.log('MATTEOPC');
 
-const discountedPrice =  function (price) {
-    let result = 0;
-    for (let product of products) {
-        result += product.price;
-    }
-    return result;
-}
-const residuo = function (price){
-    let result = price;
-    for (let product of products) {
-        result -= product.price;
-    }
-    return result;
-}
 //const discountedPrice  = (price, rate = 0.10) => (price * (1 - rate)).toFixed(2);
 
 
-const createDelimiter= (openClose, symbol, times) => `${openClose} ${symbol.repeat(times)} ${openClose}`;
+const totalvalue = function (price, total){
+    let result= total;
+    return result+= price;
+}
+
 //arrow function
-//const getUser = (uuid) => users.find(user => user.uuid === uuid);
 const getUser = function (uuid){
     let user = users.find(user => user.uuid === uuid);
     return user;
@@ -48,23 +37,12 @@ const getPercentagefromPromocode = function (promoCodeName){
     
     return 0;
 }
-const printReceipt= (uuid, receipt) => {
-    fs.writeFile('./receipts/${uuid}_recepit_${genDate()}.txt', receipt, err =>{
-        if(err){
-            console.log(err)
-            return
-        }
-    });
-
-};
 
 export {
     getUser,
     getPercentagefromPromocode,
     getProduct,
-    createDelimiter,
-    printReceipt,
-    discountedPrice,
-    residuo
+    totalvalue
+//    discountedPrice,
 };
 
