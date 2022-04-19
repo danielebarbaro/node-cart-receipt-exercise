@@ -59,7 +59,7 @@ for (let cartRow of carts) {
         let rate = core.getPercentagefromPromocode(promoutente);
         console.log(`+ ${limite.repeat(35)}+`);
         console.log(`Sconto: ${rate}`)
-        totaleordine=totaleordine-rate;
+        totaleordine=totaleordine*rate;
         console.log(`Totale Scontato:`, totaleordine);
          if(disponibilitautente <= totaleordine)
          {
