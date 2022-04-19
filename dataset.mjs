@@ -1,10 +1,10 @@
-const products = [
+const products = [ // const perchè non possono essere modificate dall' esterno
     {
         name: 'Emilia Romagna',
         ean: 162345,
         price: 12.10,
         type: 'book',
-    },
+    },// le graffe delimitano inizio e fine di un nodo. In qst caso ci sono delle proprietà in ogni nodo
     {
         name: 'piemonte',
         ean: 290834,
@@ -62,7 +62,7 @@ const users = [
         lastName: 'Wolf',
         wallet: 62.11,
         isTeacher: true,
-    },
+    }, // in questi nodi ci sono altre proprietà, quelle degli utenti. Ogni nodo è un oggetto
     {
         uuid: 'aa21fb3b-efb5-46f1-90ef-0cb1bb08fb3b',
         firstName: 'Marsellus',
@@ -120,7 +120,7 @@ const promoCode = [
 ];
 
 const carts = [
-    {
+    {// 2 proprietà in un nodo: user (il suo id) e products. 
         user: 'd0393a66-4e43-493e-b587-49d7ae95af0c',
         products: [
             120193,
@@ -156,7 +156,7 @@ const carts = [
     },
     {
         user: '8447a948-1ebe-45c8-a790-ad498563a483',
-        products: []
+        products: [] // caso in cui l'utente non ha acquistato niente
     },
     {
         user: '8979c836-0717-4e0f-8285-048d203fe96c',
@@ -166,9 +166,10 @@ const carts = [
     },
 ];
 
-export {
+export { // export consente di esportare queste variabili in altri files tramite import
     products,
     users,
     promoCode,
     carts
 };
+// Questo file è di tipo JSON, quindi è possibile importarlo in un file JS. 
