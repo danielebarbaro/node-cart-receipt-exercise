@@ -64,12 +64,10 @@ for (let cartRow of carts) {
     let sconto;
     let totaleOrdineScontato;
 
-    if(nomePromo == 'SPRING'){
-        sconto = totaleOrdine * 0.25;
-    } else if(nomePromo == 'PROMO-10'){
-        sconto = totaleOrdine * 0.10;
-    } else{
+    if(nomePromo === null || nomePromo === ''){
         sconto = totaleOrdine * 0;
+    } else{
+        sconto = totaleOrdine * rate;
     }
     
     totaleOrdineScontato = totaleOrdine - sconto;
@@ -86,6 +84,8 @@ for (let cartRow of carts) {
         console.log(`Codice PROMO: ${nomePromo}`);
     } 
 
+   
+
     delimeter = core.createDelimiter('+','-',60);
     console.log(delimeter);
 
@@ -96,12 +96,17 @@ for (let cartRow of carts) {
 
     if(disponibilitaUtente < totaleOrdineScontato){
         console.log(` ${nomeUtente} NON HA ABBASTANZA SOLDI PER COMPRARE.`);
+        continue;
     }
+
+    let disponibilitaRimanente = 0;
+
+    disponibilitaRimanente = disponibilitaUtente - totaleOrdineScontato;
 
 
     if(disponibilitaUtente > 0)
     {
-        console.log(`${nomeUtente} ha un credito residuo di ${disponibilitaUtente} euro \n`);
+        console.log(`${nomeUtente} ha un credito residuo di ${disponibilitaRimanente.toFixed(2)} euro \n`);
 
     }else{
         console.log(`${nomeUtente} ha il portafoglio VUOTO `);

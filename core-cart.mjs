@@ -59,39 +59,14 @@ const printShopName = () => {
     return `${username.toUpperCase()} - Cart ${process.pid}`;
 }
 
-
-//const formatProductName = (product) => product;
-
-//const filterType = (products, type) => product;
-
-//const sumCartItem = (products) => (products);
-
-//const formatProductList = (products) => products;
-
-//const printReceipt = (content, filename) => '';
-
 const createDelimiter = (openClose, symbol, times) => `${openClose}${symbol.repeat(times)} ${openClose}`;
-
-//const getProductByCart = (products) => products;
-
-//const getUserDiscount = () => 0;
-
-//const receiptFileName = (uuid, date) => '';
 
 export {
     discountedPrice,
     helloWorld,
     printShopName,
     getUser,
-  // formatProductName,
-    //filterType,
-    //sumCartItem,
-    //formatProductList,
-    //printReceipt,
     createDelimiter,
-    //getProductByCart,
-    //getUserDiscount,
-    //receiptFileName,
     getProduct,
     getPercentageFromPromoCode,
     delimiter,
