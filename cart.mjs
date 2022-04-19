@@ -79,10 +79,10 @@ for (let cartRow of carts) {
     
     console.log(`Sconto: ${sconto.toFixed(2)}`);
     console.log(`Totale scontato: ${totaleOrdineScontato.toFixed(2)}\n`);
-    
-    if(nomePromo == 'SPRING' || nomePromo == 'PROMO-10'){
+
+    if(user.promo === nomePromo){
         console.log(`Codice PROMO: ${nomePromo}`);
-    } 
+    }
 
    
 
