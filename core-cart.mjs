@@ -5,25 +5,18 @@ import * as os from "os"; //sistema operativo (os)
 
 const discountedPrice = (price, rate = 0.10) => (price * (1 - rate)).toFixed(2);
 
+const createDelimiter = (openClose, symbol, times) => `${openClose} ${symbol.repeat(times)} ${openClose}`;
 
-//ARROW FUNCTION : const getUser = (uuid) => users.find(user => user.uuid === uuid);
+const printShopName = () => {
+    const {username} = os.userInfo();
+    return `${username.toUpperCase()} - Cart ${process.pid}`;
+}
 
-//funzione iterativa
 function getUser(uuid){
     let user = users.find(user => uuid === user.uuid);
     return user;
 }
 
-
-//function getProduct(productId){
-  //  let product = products.find(product => productId === product.ean);
-    //return product;
-//}
-
-/*const getProduct = function (productId){
-     
-    return products.find(product => productId === product.ean);
-}*/
 
 const getProduct = (productId) => products.find(product => product.ean === productId)
 
@@ -42,29 +35,37 @@ const getPercentageFromPromoCode = function (promoCodeName){
 }
 
 
-const printShopName = () => {
-    const {username} = os.userInfo();
-    return `${username.toUpperCase()} - Cart ${process.pid}`;
+
+
+
+const formatProductName = (product) => {
+    return product.toLowerCase().charAt(0).toUpperCase() + product.toLowerCase().slice(1)
 }
-
-
-const formatProductName = (product) => product;
 
 const filterType = (products, type) => product;
 
-const sumCartItem = (products) => (products);
+const sumCartItem = (list) => {
+    let total = 0;
+    if (list != null){
+        for (let codice of list) {
+            let prodotto = products.find(product => product.ean === codice);
+            total += prodotto.price;
+        }
+    }
+    return total.toFixed(2);
+}
 
 const formatProductList = (products) => products;
 
 const printReceipt = (content, filename) => '';
 
-const createDelimiter = (openClose, symbol, times) => ''
 
 const getProductByCart = (products) => products;
 
 const getUserDiscount = () => 0;
 
 const receiptFileName = (uuid, date) => '';
+
 
 export {
     discountedPrice,
@@ -82,3 +83,4 @@ export {
     getProduct,
     getPercentageFromPromoCode
 };
+
