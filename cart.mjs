@@ -1,5 +1,7 @@
 import {carts, products, promoCode, users} from "./dataset.mjs";
 import * as core from "./core-cart.mjs"; 
+import { printShopName } from "./core-cart.mjs";
+import { discountedPrice } from "./core-cart.mjs";
 
 //STAMPATORE DI RICEVUTE PER UTENTI
 for (let cartRow of carts) { 
@@ -14,10 +16,9 @@ for (let cartRow of carts) {
 
     //PREPARA VARIABILI PER IL CARRELLO DI UN UTENTE
     let totaleOrdine = 0;
-    let ean = '';
-    let nomeProdotto = '';
-    let prezzoProdotto ='';
-    let rigaRicevuta = '';
+    let del1=`+`
+    let del2=`*`
+    let del3=`**`
     
     /*
     console.log('Utente corrente', UUIDCorrente, '\n')
@@ -34,73 +35,85 @@ for (let cartRow of carts) {
         console.log(`${nomeUtente} ha il portafoglio VUOTO `)
     }
     */
-    core.printShopName
-    console.log('+ -------------------------------------------------- +');
-    console.log(core.heading);
-    console.log('* -------------------------------------------------- *');
-    //STAMPA SE IL CARRELLO NON HA PRODOTTI
+   
+    console.log(core.righe(del1))
+
+ //STAMPA SE IL CARRELLO NON HA PRODOTTI
     if(prodottiUtente<1){
         console.log(`${nomeUtente} NON HA PRODOTTI NEL CARRELLO.`)
+        console.log(core.righe(del2))
     }
 
     else{
+
+    //INTESTAZIONE SCONTRINO
+    console.log(core.printShopName())        
+    console.log(core.heading())
+    console.log(core.righe(del1))
+    //NOME UTENTE
+    console.log(`${nomeUtente}\nDisponibilità: ${disponibilitaUtente}`)
+    console.log(core.righe(del2))
+
     //STAMPATORE DI PRODOTTI PER IL CARRELLO DI UN UTENTE
     for(let prodotto of prodottiUtente){
 
         //RINOMINA VARIABILI PER OGNI PRODOTTO
         let prodottoCorrente = core.getProduct(prodotto);
         let codiceProdotto = prodottoCorrente.ean;
-        let nomeProdotto = prodottoCorrente.name;
+        let nomeProdotto =  core.formatCart(prodottoCorrente);
         let prezzoProdotto = prodottoCorrente.price;
-        let rigaRicevuta = ` \t [${codiceProdotto}] \t ${nomeProdotto} \t ${prezzoProdotto}`
+        let rigaRicevuta = `\t [${codiceProdotto}]\t\t${nomeProdotto}\t ${prezzoProdotto}`
 
         //STAMPA PRODOTTO
-        console.log(rigaRicevuta,'\n')
+        console.log(rigaRicevuta)
 
         //SOMMA PREZZO TOTALE CARRELLO
         totaleOrdine += prezzoProdotto
     }
 
+    console.log(core.righe(del2))
 
-    console.log('* -------------------------------------------------- *');
     //STAMPA PREZZO TOTALE CARRELLO
-    console.log("Totale: "+totaleOrdine.toFixed(2));
+    console.log(`Totale:\t\t\t\t\t\t${totaleOrdine.toFixed(2)}`);
+    console.log(core.righe(del1))
+
+
+        //STAMPA CODICE PROMO E PREZZO TOTALE CARRELLO SCONTATO
+        if(promoUtente != '' && promoUtente != undefined && promoUtente != null) {
+
+            let rate = core.getPercentageFromPromoCode(promoUtente);
+            let discountedPrice = core.discountedPrice(totaleOrdine, rate)
+            let sconto = totaleOrdine-discountedPrice;
+    
+            console.log('Sconto: \t\t\t\t\t',sconto.toFixed(2));
+            console.log('Totale scontato: \t\t\t\t',discountedPrice);
+
+            console.log(`CODICE PROMO: \t\t\t\t\t${promoUtente}  `);
+            console.log(core.righe(del1))
     }
-
-    console.log('* -------------------------------------------------- *');
-    //STAMPA CODICE PROMO E PREZZO TOTALE CARRELLO SCONTATO
-    if(promoUtente != '' 
-       && promoUtente != undefined
-       && promoUtente != null) {
-
-        let rate = core.getPercentageFromPromoCode(promoUtente);
-        let discountedPrice = core.discountedPrice(totaleOrdine, rate)
-        let sconto = totaleOrdine-discountedPrice;
-
-        console.log('Sconto: ',sconto.toFixed(2));
-        console.log('Totale scontato: ',discountedPrice);
-        console.log('');
-        console.log(`CODICE PROMO: \t\t ${promoUtente}  `);
-    }
-    else{
-        console.log('');
-    }
-
-    console.log('* -------------------------------------------------- *');
-    console.log('');
-    console.log('* -------------------------------------------------- *');
 
     //STAMPA AVVISO SE FONDI INSUFFICENTI
-    if(disponibilitaUtente < totaleOrdine){
-    console.log(` ${nomeUtente} NON HA ABBASTANZA SOLDI PER COMPRARE.`)
-    }
+    let residuo= disponibilitaUtente-totaleOrdine;
+    let residuoPromo= disponibilitaUtente-discountedPrice;
+    let sconto = totaleOrdine-discountedPrice;
 
+    console.log('\n')
+    console.log(core.righe(del3))
+
+    if(user.promo!=undefined && user.promo!='' && user.promo!= null)
+        if(disponibilitaUtente<sconto){
+            console.log(nomeUtente,'ha un credito insufficiente per l\'acquisto')
+        }
+        else 
+            console.log(`${nomeUtente} ha un credito residuo di ${residuoPromo.toFixed(2)}`)
     else{
-        let creditoResiduo = disponibilitaUtente - totaleOrdine;
-        console.log(` ${nomeUtente} ha un credito residuo di ${creditoResiduo.toFixed(2)}`);
+        if(disponibilitaUtente<totaleOrdine)
+            console.log(nomeUtente,'ha un credito insufficiente per l\'acquisto')
+        else
+            console.log(`${nomeUtente} ha un credito residuo di ${residuo.toFixed(2)}`)
     }
+    console.log(core.righe(del3))
+}
 
-    console.log('* -------------------------------------------------- *');
-
-    console.log("");console.log("");console.log("");console.log("");
+console.log('\n\n');
 }

@@ -3,7 +3,7 @@ import * as fs from "fs";
 import * as os from "os"; 
 
 //CALCOLA PREZZO SCONTATO
-const discountedPrice = (price, rate = 0.10) => (price * (1 - rate)).toFixed(2);
+const discountedPrice = (price, rate) => (price * (1 - rate)).toFixed(2);
 
 
 //TROVA ID UTENTE
@@ -20,18 +20,15 @@ const getProduct = (productId) => products.find(product => product.ean === produ
 //TROVA PERCENTUALE SCONTO
 const getPercentageFromPromoCode = function (promoCodeName){
 
-    if(promoCodeName !== '' 
-       && promoCodeName !== undefined
-       && promoCodeName !== null) {
-
+    if(promoCodeName !== '' && promoCodeName !== undefined && promoCodeName !== null) {
     let rate = promoCode.find(item => promoCodeName === item.name);
     return rate.percentage;
     }
-    return 0;
+return 0;
 }
 
 
-//NON LO SO
+//INFO MACCHINA
 const printShopName = () => {
     const {username} = os.userInfo();
     return `${username.toUpperCase()} - Cart ${process.pid}`;
@@ -45,40 +42,57 @@ const heading = function(){
 }
 
 
-//NON LO SO
-const formatProductName = (product) => product;
+//FORMATTAZIONE PRODOTTI
+function format(products) {
+    
+    let result = '';
+    let resultProductLowerCase = products.toLowerCase();
 
-const filterType = (products, type) => product;
+    let firstLetter = resultProductLowerCase.charAt(0);
+    let firstLetterUpperCaseUpperCase = firstLetter.toUpperCase();
 
-const sumCartItem = (products) => (products);
+    let lastPartOfString = resultProductLowerCase.slice(1);
 
-const formatProductList = (products) => products;
+    result = `${firstLetterUpperCaseUpperCase}${lastPartOfString}`
 
-const printReceipt = (content, filename) => '';
+    return result;
+}
 
-const createDelimiter = (openClose, symbol, times) => ''
+//FORMATTAZIONE CARRELLO
+const formatCart = (item) => {
+    
+   
+    let formattedName = '';
+    let productName = item.name
 
-const getProductByCart = (products) => products;
+    let multiName = productName.split(' ');
 
-const getUserDiscount = () => 0;
+    for (let piece of multiName) {
+        if(piece!= multiName[0])
+            formattedName += ' '
+            
+        formattedName += format(piece);
+    }
 
-const receiptFileName = (uuid, date) => '';
+    return formattedName;
+}
 
+//SEPARATORI
+const righe= function(del){
+    let righe=''
+    for(let i=0;i<55;i++)
+        righe+='-'
+    return del+righe+del
+}
 
 //ESPORTATORE COSTANTI
 export {
     discountedPrice,
     printShopName,
     getUser,
-    formatProductName,
-    filterType,
-    sumCartItem,
-    formatProductList,
-    printReceipt,
-    createDelimiter,
-    getProductByCart,
-    getUserDiscount,
-    receiptFileName,
+    heading,
+    righe,
+    formatCart,
     getProduct,
     getPercentageFromPromoCode
 };
