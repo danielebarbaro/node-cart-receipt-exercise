@@ -1,3 +1,4 @@
+
 import {carts, products, promoCode, users} from "./dataset.mjs";
 import * as core from "./core-cart.mjs";
 import * as fs from "fs";
@@ -79,5 +80,4 @@ for(let item of carts){
     let path =process.cwd()+'/receipts/' + UUIDCorrente + '_' + 'receipt' + '_' +new Date().toDateString()+'.txt';
     fs.writeFile(path,receipt,(err) => { if (err) throw err; })
     }
-
 }
