@@ -1,6 +1,5 @@
 import {carts, products, promoCode, users} from "./dataset.mjs";
 import * as core from "./core-cart.mjs"; 
-import { discountedPrice } from "./core-cart.mjs";
 
 //STAMPATORE DI RICEVUTE PER UTENTI
 for (let cartRow of carts) { 
@@ -19,7 +18,7 @@ for (let cartRow of carts) {
     let nomeProdotto = '';
     let prezzoProdotto ='';
     let rigaRicevuta = '';
-
+    
     /*
     console.log('Utente corrente', UUIDCorrente, '\n')
     console.log('Prodotti utente corrente',prodottiUtente, '\n')
@@ -35,11 +34,9 @@ for (let cartRow of carts) {
         console.log(`${nomeUtente} ha il portafoglio VUOTO `)
     }
     */
-    
+    core.printShopName
     console.log('+ -------------------------------------------------- +');
-    console.log("ICTS21-23.217 Cart - 43874");
     console.log(core.heading);
-
     console.log('* -------------------------------------------------- *');
     //STAMPA SE IL CARRELLO NON HA PRODOTTI
     if(prodottiUtente<1){
