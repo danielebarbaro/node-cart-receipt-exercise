@@ -30,9 +30,8 @@ const getPercentagefromPromocode = function (promoCodeName){
     && promoCodeName !==null){
         
         let rate = promoCode.find(promo => promoCodeName === promo.name);
-        console.log(rate)
         return rate.percentage;
-        
+    
     }
     
     return 0;
